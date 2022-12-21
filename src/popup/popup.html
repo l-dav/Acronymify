@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="popup.css"/>
+	</head>
+
+	<body>
+		<div id="main_page">
+			<h1>Acronymify</h1>
+			<h2 id="version"></h2>
+			<p>
+				Get informations about your acronyms.<br>
+				Select the word you don't know, then <span id="keyboard_shortcut"></span>
+			</p>
+			<p><input type="text" id="online_db_url" placeholder="URL to online DB" value=""><button type="button" id="loading_button">Load</button></p>
+			<p id="online_db_loading_result"></p>
+			<p>Your config :</p>
+
+			<textarea id="my_db"></textarea>
+			<br>
+			<button type="button" id="add_data">Refresh</button>
+
+			<p id="author"></p>
+			<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
+
+			<p>
+				<a id="suggestion_acronym" href="mailto:l.davidovski@technologyandstrategy.com">Suggest new acronyms (mail)</a>
+				<a id="url_add" href="http://no_web_site.com">Suggest new acronyms (git)</a>
+			</p>
+
+			<p><button type="button" id="reset_params">Reset params</button></p>
+		</div>
+
+		<div id="word_definition"></div>
+
+		<script src="popup.js"></script>
+	</body>
+
+</html>

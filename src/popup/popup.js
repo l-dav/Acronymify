@@ -1,0 +1,178 @@
+
+// Show version
+document.getElementById("version").textContent = 'Version ' + browser.runtime.getManifest().version;
+
+// Show author
+document.getElementById("author").textContent = 'Author: ' + browser.runtime.getManifest().author;
+
+// Show keyboard shortcut
+document.getElementById("keyboard_shortcut").textContent = browser.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Utility functions
+
+
+// save data to local storage
+function save_data(url, local_config, db) {
+	if (url) browser.storage.local.set({url: url});
+
+	if (local_config) browser.storage.local.set({local_config: local_config});
+	
+	if (db) browser.storage.local.set({db: db});
+}
+
+// append a definition element
+function appendHTML(parent_id, element) {
+	let html_code = `
+		<p><span>${element.Acronym}</span> : <span>${element.Meaning}</span></p>
+		<p style="padding-left:30px">${element.Hint}</p>
+		<p style="padding-left:30px">${element.Alternatives}</p>
+		<p style="padding-left:30px">${element.url}</p>
+	`;
+
+	var div = document.createElement("div");
+	div.innerHTML = html_code;
+	document.getElementById(parent_id).appendChild(div);
+}
+
+// return default JSON configuration file, as string
+function get_default_config() {
+	return `{
+		"acronyms_source" : "https://truc.muche/file.json" ,
+		"url_add" : "https://truc.muche/pr" ,
+		"mail_add" : "truc@much.com" ,
+		"custom_entries" : [{
+			"Acronym": "your_acronym",
+			"Meaning": "your_full_meaning",
+			"Hint": "your_definition",
+			"Alternatives": "your_alternatives",
+			"url": "your_url"
+		}]
+	}`;
+}
+
+function onExecuted(result) {
+	result = result[0];
+	if (result != '') { // if a word is selected
+		document.getElementById("main_page").style.display = "none";
+		document.getElementById("word_definition").style.display = "block";
+		
+		result = result.trim(); // remove leading and trailing spaces
+
+		// loop and show all elements that match the wanted acronym 'result'
+		let found_entry = false;
+		DB['entries'].forEach(element => {
+			if (element['Acronym'].toUpperCase() === result.toUpperCase()) {
+				appendHTML("word_definition", element);
+				found_entry = true;
+			}
+		});
+
+		// if no entry was found, then we show the user that we don't know this word.
+		if (!found_entry) {
+			document.getElementById("word_definition").textContent = "Unknown word: " + result;
+		}
+	} else {
+		document.getElementById("online_db_loading_result").textContent = DB['entries'].length + " entries loaded.";
+	}
+}
+
+function reset() {
+	// clear storage
+	browser.storage.local.clear();
+
+	// reload popup
+	browser.runtime.reload();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// add click listener
+
+
+// call reset function onclick
+document.getElementById("reset_params").onclick = reset;
+
+// Function triggered onclick on the button to load an online DB
+document.getElementById("loading_button").onclick = function() {
+
+	// Show that we are loading ...
+	document.getElementById("online_db_loading_result").textContent = "...";
+
+	// Fetch online ressource
+	fetch(document.getElementById("online_db_url").value)
+		.then(response => response.json())
+		.then(response => {
+			let local_config = JSON.parse(document.getElementById("my_db").value);
+			local_config["acronyms_source"] = document.getElementById("online_db_url").value;
+
+			document.getElementById("my_db").value = JSON.stringify(local_config, null, 2);
+
+			save_data(false, JSON.stringify(local_config, null, 2), JSON.stringify(response, null, 2));
+
+			document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
+		})
+		.catch(
+			document.getElementById("online_db_loading_result").textContent = "Error while fetching online DB"
+		);
+};
+
+
+// triggered when we want to save our modifications ; our acronyms
+document.getElementById("add_data").onclick = function() {
+	// try to convert to JSON. If error in JSON format, show an error message.
+	try {
+		json_data = document.getElementById("my_db").value;
+		save_data(false, JSON.stringify(JSON.parse(json_data), null, 2), false);
+		browser.runtime.reload();
+	} catch (err) {
+		document.getElementById("online_db_loading_result").textContent = "Error in JSON format.";
+	}
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// load storage data
+
+var DB = new Object();
+
+browser.storage.local.get() // get all stored data, key/value
+	.then((res) => {
+
+		// load DB from local storage. Initialize the variable DB.
+		if (res.db != undefined) DB = JSON.parse(res.db);
+		else DB['entries'] = [];
+
+		// load local config ; from storage or else from default config
+		if (res.local_config != undefined) local_config = JSON.parse(res.local_config);
+		else local_config = JSON.parse(get_default_config());
+		
+		// check the key 'mail_add' (email this mail to make suggestions)
+		if (local_config.hasOwnProperty("mail_add"))
+			document.getElementById("suggestion_acronym").href = "mailto:" + local_config['mail_add'];
+		
+		// check the key 'url_add' (url to the Git repo)
+		if (local_config.hasOwnProperty("url_add"))
+			document.getElementById("url_add").href = local_config['url_add'];
+		
+		// Check the key 'acronyms_source' (link to online DB)
+		if (local_config.hasOwnProperty("acronyms_source"))
+			document.getElementById("online_db_url").value = local_config['acronyms_source'];
+		
+		// Check for the key 'custom_entries' and concat to the other entries
+		if (local_config.hasOwnProperty("custom_entries"))
+			DB['entries'] = DB['entries'].concat(local_config['custom_entries']);
+		
+		// update our textarea with the config
+		document.getElementById("my_db").value = JSON.stringify(local_config, null, 2);
+
+		// if our DB is not empty (if we have entries), we check if a word is selected
+		if (Object.keys(DB).length !== 0) {
+			// One-liner to get the current selected word on the page
+			const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
+
+			// When the popup is loaded, execute the script in the main page and get result
+			browser.tabs.executeScript({code: getWindowSelection}).then(onExecuted);
+		}
+	});

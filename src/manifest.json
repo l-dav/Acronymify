@@ -1,0 +1,43 @@
+{
+	"description": "Recognize your acronyms on the web.",
+	"manifest_version": 2,
+	"name": "Acronymify",
+	"version": "0.1.2",
+	"author": "Léon Davidovski",
+	"homepage_url": "https://no_web_page_for_now_but_maybe_soon.com",
+	"icons": {
+		"48": "icons/ebike-48.png"
+	},
+
+	"permissions": [
+		"activeTab",
+		"<all_urls>",
+		"storage"
+	],
+
+	"browser_action": {
+		"default_icon": "icons/ebike-48.png",
+		"theme_icons": [{
+			"light": "icons/ebike-48.png",
+			"dark": "icons/ebike-48.png",
+			"size": 48
+		}],
+		"default_title": "Acronymify",
+		"default_popup": "popup/popup.html"
+	},
+
+	"browser_specific_settings": {
+		"gecko": {
+		  	"id": "acronymify@technologyandstrategy.com"
+		}
+	},
+	
+	"commands": {
+		"_execute_browser_action": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+F"
+		}
+		}
+	}
+	  
+}
