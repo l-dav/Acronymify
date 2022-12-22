@@ -10,22 +10,21 @@ Acronymify is a Firefox Extension.
 
 ### Overview
 
-The source code is in the folder "./src/". It contains a file "manifest.json" containing metadata about the extension, as specified in [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json). The extension popup is coded in the "/popup/" folder, and contains HTML/CSS/JS code.
+The source code is in the folder `./src/`. It contains a file "manifest.json" containing metadata about the extension, as specified in [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json). The extension popup is coded in the `./src/popup/` folder, and contains HTML/CSS/JS code.
 
-To share your extension, you need it to be "signed": your extension need to pass a serie of test, then a .xpi file will be created.
+To share your extension, it needs to be "signed": your extension needs to pass a serie of test, then a .xpi file will be created.
 The Makefile allows you to sign your extension.
 
 
 ### Installation
-
 If you have a signed .xpi file:
-- open it with Firefox (e.g. drag-and-drop) and accept the installation
+- open it with Firefox (e.g. drag-and-drop) and accept the installation.
 
 If you have the source code:
 - go to "about:debugging#/runtime/this-firefox" in Firefox
 - "Load Temporary Add-on..." and select any file inside the source code root folder (e.g. "manifest.json").
 
-You can know use the extension. Select a word on any website, open the extension (by shortcut or by clicking the extension icon in the top-right), and you will get your definition if the word is known, or a "Unknwown word" warning if the word is not recognized.
+You can now use the extension. Select a word on any website, open the extension (by shortcut as defined in the extension popup or by clicking the extension icon in the top-right), and you will get your definition if the word is known, or a "Unknwown word" warning if the word is not recognized.
 
 
 ### Code algorithm
@@ -63,7 +62,7 @@ The configuration must follow the following JSON format:
 {
     "acronyms_source": "https://url_to_online_db.com",
     "url_add": "https://url_to_db_repository.com",
-    "mail_add": "your@mail.com",
+    "mail_add": "source@mail.com",
     "custom_entries": [
         {
             "Acronym": "your_acronym",

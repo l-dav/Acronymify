@@ -1,13 +1,15 @@
+CURRENT_BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
 
-BRANCH = "$(git rev-parse --abbrev-ref HEAD)"
-
-builddd:
-	echo "wesh"
-	echo ${BRANCH}
-	# @echo "Start signing extension..."
-	# @web-ext sign --api-key=$(api-key) --api-secret=$(api-secret) --artifacts-dir=build/
+sign:
+	@if [ $(CURRENT_BRANCH) = "master" ]; then\
+        echo "Start signing extension...";\
+		web-ext sign --artifacts-dir=./build/ -s=./src/ --api-key=${firefox_api_key} --api-secret=${firefox_api_secret};\
+	else\
+		echo "BUILD ERROR: Signing can only be done in branch 'master'. Please change to master branch to sign.";\
+    fi
 
 help:
-	@echo "Sign your Firefox extension"
-	@echo "Usage:"
-	@echo 'make build api-key="" api-secret=""'
+	@echo "Usage: make [option] ..."
+	@echo "Options:"
+	@echo '	build api-key="" api-secret=""  Sign the extension, if the current branch is master.'
+	@echo '	help                            Print this message and exit.'
