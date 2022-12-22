@@ -20,6 +20,8 @@ function save_data(url, local_config, db) {
 	if (local_config) browser.storage.local.set({local_config: local_config});
 	
 	if (db) browser.storage.local.set({db: db});
+
+	browser.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked})
 }
 
 // append a definition element
@@ -60,12 +62,21 @@ function onExecuted(result) {
 		
 		result = result.trim(); // remove leading and trailing spaces
 
+		case_sensitive = document.getElementById("case_sensitive_option").checked;
+
 		// loop and show all elements that match the wanted acronym 'result'
 		let found_entry = false;
 		DB['entries'].forEach(element => {
-			if (element['Acronym'].toUpperCase() === result.toUpperCase()) {
-				appendHTML("word_definition", element);
-				found_entry = true;
+			if (case_sensitive) {
+				if (element['Acronym'] === result) {
+					appendHTML("word_definition", element);
+					found_entry = true;
+				}
+			} else {
+				if (element['Acronym'].toUpperCase() === result.toUpperCase()) {
+					appendHTML("word_definition", element);
+					found_entry = true;
+				}
 			}
 		});
 
@@ -86,17 +97,7 @@ function reset() {
 	browser.runtime.reload();
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// add click listener
-
-
-// call reset function onclick
-document.getElementById("reset_params").onclick = reset;
-
-// Function triggered onclick on the button to load an online DB
-document.getElementById("loading_button").onclick = function() {
-
+function fetch_online_db() {
 	// Show that we are loading ...
 	document.getElementById("online_db_loading_result").textContent = "...";
 
@@ -104,10 +105,10 @@ document.getElementById("loading_button").onclick = function() {
 	fetch(document.getElementById("online_db_url").value)
 		.then(response => response.json())
 		.then(response => {
-			let local_config = JSON.parse(document.getElementById("my_db").value);
+			let local_config = JSON.parse(document.getElementById("local_configuration").value);
 			local_config["acronyms_source"] = document.getElementById("online_db_url").value;
 
-			document.getElementById("my_db").value = JSON.stringify(local_config, null, 2);
+			document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
 
 			save_data(false, JSON.stringify(local_config, null, 2), JSON.stringify(response, null, 2));
 
@@ -116,20 +117,35 @@ document.getElementById("loading_button").onclick = function() {
 		.catch(
 			document.getElementById("online_db_loading_result").textContent = "Error while fetching online DB"
 		);
-};
+}
 
-
-// triggered when we want to save our modifications ; our acronyms
-document.getElementById("add_data").onclick = function() {
+function refresh_local_configuration() {
 	// try to convert to JSON. If error in JSON format, show an error message.
 	try {
-		json_data = document.getElementById("my_db").value;
+		json_data = document.getElementById("local_configuration").value;
 		save_data(false, JSON.stringify(JSON.parse(json_data), null, 2), false);
 		browser.runtime.reload();
 	} catch (err) {
 		document.getElementById("online_db_loading_result").textContent = "Error in JSON format.";
 	}
-};
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// add click listener
+
+
+// call reset function onclick
+document.getElementById("reset_params").onclick = reset;
+
+// save checkbox value
+document.getElementById("case_sensitive_option").onclick = save_data;
+
+// Function triggered onclick on the button to load an online DB
+document.getElementById("loading_button").onclick = fetch_online_db;
+
+// triggered when we want to save our modifications ; our acronyms
+document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +181,7 @@ browser.storage.local.get() // get all stored data, key/value
 			DB['entries'] = DB['entries'].concat(local_config['custom_entries']);
 		
 		// update our textarea with the config
-		document.getElementById("my_db").value = JSON.stringify(local_config, null, 2);
+		document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
 
 		// if our DB is not empty (if we have entries), we check if a word is selected
 		if (Object.keys(DB).length !== 0) {
@@ -175,4 +191,8 @@ browser.storage.local.get() // get all stored data, key/value
 			// When the popup is loaded, execute the script in the main page and get result
 			browser.tabs.executeScript({code: getWindowSelection}).then(onExecuted);
 		}
+
+		// update the case sensitivity checkbox with the storage
+		if (res.case_sensitive != undefined)
+			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
 	});

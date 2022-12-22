@@ -15,6 +15,10 @@ The source code is in the folder `./src/`. It contains a file "manifest.json" co
 To share your extension, it needs to be "signed": your extension needs to pass a serie of test, then a .xpi file will be created.
 The Makefile allows you to sign your extension.
 
+### Functionnalities
+
+You can pass a URL to an online JSON database in the input field, and click "Load".
+
 
 ### Installation
 If you have a signed .xpi file:
@@ -32,9 +36,22 @@ You can now use the extension. Select a word on any website, open the extension 
 The popup is design in plain HTML/CSS, and all interactions are written in plain JavaScript.
 
 Each time the extension popup is open, it is reload.
-It starts by checking the storage, and load a database or a configuration if exist.
 
-You can pass a URL to an online JSON database in the input field, and click "Load".
+We start by displaying dynamic informations from the file "manifest.json": version, author, keyboard shortcut.
+
+Then we check the local storage:
+- if a local configuration is stored, it is loaded
+- if not, then we load a default configuration
+
+Then, we update the page with this informations: url_add, mailto, case sensitive option, ...
+
+We add click listener to several events:
+- Reset button: on click on it, we clear the local storage and reload the extension. It will be clean as a new installation.
+- Case sensitive checkbox
+- Fetching button: to download an online database.
+- Refresh button: reload the extension
+
+### Formats
 
 The database must follow the following JSON format:
 ```json

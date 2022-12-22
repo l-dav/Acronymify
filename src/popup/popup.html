@@ -15,12 +15,19 @@
 				Select the word you don't know, then <span id="keyboard_shortcut"></span>
 			</p>
 			<p><input type="text" id="online_db_url" placeholder="URL to online DB" value=""><button type="button" id="loading_button">Load</button></p>
+			
 			<p id="online_db_loading_result"></p>
+			
+			<div>
+				<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
+				<label for="case_sensitive_option">Case sensitive</label>
+			</div>
+			
 			<p>Your config :</p>
 
-			<textarea id="my_db"></textarea>
+			<textarea id="local_configuration"></textarea>
 			<br>
-			<button type="button" id="add_data">Refresh</button>
+			<button type="button" id="refresh_local_configuration_button">Refresh</button>
 
 			<p id="author"></p>
 			<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
