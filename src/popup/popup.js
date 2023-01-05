@@ -97,17 +97,17 @@ function reset() {
 	browser.runtime.reload();
 }
 
-function fetch_online_db() {
+function refresh_local_configuration() {
 	// Show that we are loading ...
 	document.getElementById("online_db_loading_result").textContent = "...";
 
-	// Fetch online ressource
-	fetch(document.getElementById("online_db_url").value)
+	try {
+		local_config = JSON.parse(document.getElementById("local_configuration").value);
+
+		// Fetch online ressource
+		fetch(local_config["acronyms_source"])
 		.then(response => response.json())
 		.then(response => {
-			let local_config = JSON.parse(document.getElementById("local_configuration").value);
-			local_config["acronyms_source"] = document.getElementById("online_db_url").value;
-
 			document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
 
 			save_data(false, JSON.stringify(local_config, null, 2), JSON.stringify(response, null, 2));
@@ -115,21 +115,13 @@ function fetch_online_db() {
 			document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
 		})
 		.catch(
-			document.getElementById("online_db_loading_result").textContent = "Error while fetching online DB"
+			document.getElementById("online_db_loading_result").textContent = "ERROR: Error while fetching online DB. Please check your source URL."
 		);
-}
 
-function refresh_local_configuration() {
-	// try to convert to JSON. If error in JSON format, show an error message.
-	try {
-		json_data = document.getElementById("local_configuration").value;
-		save_data(false, JSON.stringify(JSON.parse(json_data), null, 2), false);
-		browser.runtime.reload();
 	} catch (err) {
-		document.getElementById("online_db_loading_result").textContent = "Error in JSON format.";
+		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
 	}
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add click listener
@@ -140,9 +132,6 @@ document.getElementById("reset_params").onclick = reset;
 
 // save checkbox value
 document.getElementById("case_sensitive_option").onclick = save_data;
-
-// Function triggered onclick on the button to load an online DB
-document.getElementById("loading_button").onclick = fetch_online_db;
 
 // triggered when we want to save our modifications ; our acronyms
 document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration
@@ -171,10 +160,6 @@ browser.storage.local.get() // get all stored data, key/value
 		// check the key 'url_add' (url to the Git repo)
 		if (local_config.hasOwnProperty("url_add"))
 			document.getElementById("url_add").href = local_config['url_add'];
-		
-		// Check the key 'acronyms_source' (link to online DB)
-		if (local_config.hasOwnProperty("acronyms_source"))
-			document.getElementById("online_db_url").value = local_config['acronyms_source'];
 		
 		// Check for the key 'custom_entries' and concat to the other entries
 		if (local_config.hasOwnProperty("custom_entries"))
