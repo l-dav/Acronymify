@@ -14,19 +14,30 @@
 				Get informations about your acronyms.<br>
 				Select the word you don't know, then <span id="keyboard_shortcut"></span>
 			</p>
-			
-			<p id="online_db_loading_result"></p>
+
+			<hr/>
+
+			<input type="text" id="search_word_in_db" placeholder="Search DB (e.g: SoC)">
+			<button type="button" id="search_in_db">Search</button>
+			<div id="word_definition_search"></div>
+
+			<hr/>
 			
 			<div>
+				<p>Options:</p>
 				<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
 				<label for="case_sensitive_option">Case sensitive</label>
 			</div>
 			
-			<p>Your config :</p>
+			<p>Config:</p>
 
 			<textarea id="local_configuration"></textarea>
 			<br>
 			<button type="button" id="refresh_local_configuration_button">Save and Refresh</button>
+
+			<p id="online_db_loading_result"></p>
+
+			<hr/>
 
 			<p id="author"></p>
 			<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>

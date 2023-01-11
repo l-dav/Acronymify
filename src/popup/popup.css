@@ -1,27 +1,29 @@
-html, body {
+html, body, h1, h2 {
 	padding: 0;
 	margin: 0;
-  	width: 600px;
+}
+
+html {
+	overflow-y: scroll;
 }
 
 body {
   	border: 4px solid #845A6D;
+	width: 600px;
 }
 
 h1 {
-	padding: 0;
-	margin: 0;
   	text-align: center;
 }
 
 h2 {
-	padding: 0;
-	margin: 0;
 	text-align: center;
   	font-style: italic;
 }
 
 textarea {
-	width: 100%;
-  	height: 100px;
+	width: 95%;
+	height: 200px;
+	display: block;
+	margin: auto;
 }

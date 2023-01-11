@@ -21,7 +21,7 @@ function save_data(url, local_config, db) {
 	
 	if (db) browser.storage.local.set({db: db});
 
-	browser.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked})
+	browser.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked});
 }
 
 // append a definition element
@@ -113,6 +113,7 @@ function refresh_local_configuration() {
 			save_data(false, JSON.stringify(local_config, null, 2), JSON.stringify(response, null, 2));
 
 			document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
+			browser.runtime.reload();
 		})
 		.catch(
 			document.getElementById("online_db_loading_result").textContent = "ERROR: Error while fetching online DB. Please check your source URL."
@@ -121,6 +122,35 @@ function refresh_local_configuration() {
 	} catch (err) {
 		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
 	}
+}
+
+function search_in_db() {
+	let word = document.getElementById("search_word_in_db").value;
+	document.getElementById("word_definition_search").innerHTML = "";
+
+	case_sensitive = document.getElementById("case_sensitive_option").checked;
+
+	// loop and show all elements that match the wanted acronym 'result'
+	let found_entry = false;
+	DB['entries'].forEach(element => {
+		if (case_sensitive) {
+			if (element['Acronym'] === word) {
+				appendHTML("word_definition_search", element);
+				found_entry = true;
+			}
+		} else {
+			if (element['Acronym'].toUpperCase() === word.toUpperCase()) {
+				appendHTML("word_definition_search", element);
+				found_entry = true;
+			}
+		}
+	});
+
+	// if no entry was found, then we show the user that we don't know this word.
+	if (!found_entry) {
+		document.getElementById("word_definition_search").textContent = "Unknown word: " + word;
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,6 +165,22 @@ document.getElementById("case_sensitive_option").onclick = save_data;
 
 // triggered when we want to save our modifications ; our acronyms
 document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration
+
+// search in DB
+document.getElementById("search_in_db").onclick = search_in_db
+
+
+// Execute a function when the user presses a key on the keyboard
+document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
+	// If the user presses the "Enter" key on the keyboard
+	if (event.key === "Enter") {
+	  // Cancel the default action, if needed
+	  //event.preventDefault();
+	  // Trigger the button element with a click
+	  //document.getElementById("myBtn").click();
+	  search_in_db();
+	}
+  }); 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
