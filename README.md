@@ -15,9 +15,20 @@ The source code is in the folder `./src/`. It contains a file "manifest.json" co
 To share your extension, it needs to be "signed": your extension needs to pass a serie of test, then a .xpi file will be created.
 The Makefile allows you to sign your extension.
 
+### Build, Sign, Publish
+
+To build the extension (generate an unsigned local .xpi archive ; for testing purposes):
+> make build
+
+To sign the extension and generate the .xpi archive (no public listing ; for testing purposes):
+> make sign
+
+To sign the extension, generate the .xpi archive and list the new version on AMO:
+> make sign CHANNEL=listed
+
 ### Functionnalities
 
-You can pass a URL to an online JSON database in the input field, and click "Load".
+You can pass a URL to an online JSON database in the config field, and click "Load".
 
 
 ### Installation
