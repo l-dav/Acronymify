@@ -10,17 +10,15 @@ It recognizes all your acronyms on the web and show their definition.
 
 ![Main page](images/main_popup.PNG "Main page")
 
-Begin by selecting an online dataset to retrieve or by adding custom entries in the configuration section. Once you have clicked the "Update" button, you will be able to fully utilize Acronymify
+To start, select an online dataset to retrieve or add custom entries in the configuration section. Once you have clicked the "Update" button, you will be able to fully use Acronymify.
 
+Next, click on a word, and activate the extension by using the shortcut or clicking the extension logo. If the word's definition is known, it will be displayed.
 
-Click on a word, and open the extension (either by the shortcut or by clicking the extension logo). If its definition is known, it will be shown.
-
-You can also click the "Open DB" button to visualize all the words recognize by the extension.
-
+Additionally, you can click the "Open DB" button to view all the words recognized by the extension.
 
 ## Documentation
 
-Acronymify is a Firefox Extension.
+Acronymify is a Firefox extension.
 
 
 ### Overview
