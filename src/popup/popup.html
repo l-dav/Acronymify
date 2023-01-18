@@ -17,7 +17,7 @@
 
 			<hr/>
 
-			<input type="text" id="search_word_in_db" placeholder="Search DB (e.g: SoC)">
+			<input type="text" id="search_word_in_db" placeholder="Search DB">
 			<button type="button" id="search_in_db">Search</button>
 			<div id="word_definition_search"></div>
 
@@ -33,9 +33,11 @@
 
 			<textarea id="local_configuration"></textarea>
 			<br>
-			<button type="button" id="refresh_local_configuration_button">Save and Refresh</button>
+			<button type="button" id="refresh_local_configuration_button">Update</button>
 
 			<p id="online_db_loading_result"></p>
+
+			<button type="button" id="load_option_page">Open DB</button>
 
 			<hr/>
 
@@ -47,11 +49,12 @@
 				<a id="url_add" href="http://no_web_site.com">Suggest new acronyms (git)</a>
 			</p>
 
-			<p><button type="button" id="reset_params">Reset params</button></p>
+			<p><button type="button" id="reset_params">Reset extension</button></p>
 		</div>
 
 		<div id="word_definition"></div>
 
+		<script type="application/javascript" src="browser-polyfill.js"></script>
 		<script src="popup.js"></script>
 	</body>
 

@@ -41,9 +41,9 @@ function appendHTML(parent_id, element) {
 // return default JSON configuration file, as string
 function get_default_config() {
 	return `{
-		"acronyms_source" : "https://truc.muche/file.json" ,
-		"url_add" : "https://truc.muche/pr" ,
-		"mail_add" : "truc@much.com" ,
+		"acronyms_source" : "https://your_server.com/your_db.json" ,
+		"url_add" : "https://your_server.com/pr" ,
+		"mail_add" : "your@mail.com" ,
 		"custom_entries" : [{
 			"Acronym": "your_acronym",
 			"Meaning": "your_full_meaning",
@@ -103,6 +103,7 @@ function refresh_local_configuration() {
 
 	try {
 		local_config = JSON.parse(document.getElementById("local_configuration").value);
+		save_data(false, JSON.stringify(local_config, null, 2), false);
 
 		// Fetch online ressource
 		fetch(local_config["acronyms_source"])
@@ -110,15 +111,14 @@ function refresh_local_configuration() {
 		.then(response => {
 			document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
 
-			save_data(false, JSON.stringify(local_config, null, 2), JSON.stringify(response, null, 2));
+			save_data(false, false, JSON.stringify(response, null, 2));
 
 			document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
 			browser.runtime.reload();
 		})
-		.catch(
-			document.getElementById("online_db_loading_result").textContent = "ERROR: Error while fetching online DB. Please check your source URL."
-		);
-
+		.catch(_ => {
+			document.getElementById("online_db_loading_result").textContent = "WARNING: saving OK, but online source fetching failed.";
+		});
 	} catch (err) {
 		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
 	}
@@ -153,6 +153,10 @@ function search_in_db() {
 
 }
 
+function load_option_page() {
+	let opening = browser.runtime.openOptionsPage();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add click listener
 
@@ -168,6 +172,8 @@ document.getElementById("refresh_local_configuration_button").onclick = refresh_
 
 // search in DB
 document.getElementById("search_in_db").onclick = search_in_db
+
+document.getElementById("load_option_page").onclick = load_option_page
 
 
 // Execute a function when the user presses a key on the keyboard

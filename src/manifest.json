@@ -2,7 +2,7 @@
 	"description": "Recognize your acronyms on the web.",
 	"manifest_version": 2,
 	"name": "Acronymify",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"author": "Léon Davidovski",
 	"homepage_url": "https://no_web_page_for_now_but_maybe_soon.com",
 	"icons": {
@@ -57,6 +57,13 @@
 				"default": "Ctrl+Shift+F"
 		}
 		}
+	},
+
+	"options_ui": {
+		"page": "option_page/option.html",
+		"open_in_tab": true,
+		"browser_style": true
 	}
+	  
 	  
 }
