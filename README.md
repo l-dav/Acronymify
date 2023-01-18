@@ -1,6 +1,21 @@
 # Acronymify
 
-This is a Firefox extension that recognize all your acronyms on the web and show their definition.
+Acronymify is a Firefox extension. You can download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
+It recognizes all your acronyms on the web and show their definition.
+
+![Logo](src/icons/abc_icon_128.png "Acronymify Logo")
+
+
+## Usage
+
+![Main page](images/main_popup.PNG "Main page")
+
+Begin by selecting an online dataset to retrieve or by adding custom entries in the configuration section. Once you have clicked the "Update" button, you will be able to fully utilize Acronymify
+
+
+Click on a word, and open the extension (either by the shortcut or by clicking the extension logo). If its definition is known, it will be shown.
+
+You can also click the "Open DB" button to visualize all the words recognize by the extension.
 
 
 ## Documentation
@@ -10,12 +25,12 @@ Acronymify is a Firefox Extension.
 
 ### Overview
 
-The source code is in the folder `./src/`. It contains a file "manifest.json" containing metadata about the extension, as specified in [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json). The extension popup is coded in the `./src/popup/` folder, and contains HTML/CSS/JS code.
+The source code is in the folder `./src/`. It contains a file "manifest.json" containing metadata about the extension, as specified in [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
 
-To share your extension, it needs to be "signed": your extension needs to pass a serie of test, then a .xpi file will be created.
-The Makefile allows you to sign your extension.
 
 ### Build, Sign, Publish
+
+The Makefile allows you to build, sign, publish the extension.
 
 To build the extension (generate an unsigned local .xpi archive ; for testing purposes):
 > make build
@@ -26,10 +41,6 @@ To sign the extension and generate the .xpi archive (no public listing ; for tes
 To sign the extension, generate the .xpi archive and list the new version on AMO:
 > make sign CHANNEL=listed
 
-### Functionnalities
-
-You can pass a URL to an online JSON database in the config field, and click "Load".
-
 
 ### Installation
 If you have a signed .xpi file:
@@ -39,7 +50,7 @@ If you have the source code:
 - go to "about:debugging#/runtime/this-firefox" in Firefox
 - "Load Temporary Add-on..." and select any file inside the source code root folder (e.g. "manifest.json").
 
-You can now use the extension. Select a word on any website, open the extension (by shortcut as defined in the extension popup or by clicking the extension icon in the top-right), and you will get your definition if the word is known, or a "Unknwown word" warning if the word is not recognized.
+You can now use Acronymify.
 
 
 ### Code algorithm
@@ -64,7 +75,7 @@ We add click listener to several events:
 
 ### Formats
 
-The database must follow the following JSON format:
+The online database must follow the following JSON format:
 ```json
 {
     "entries": [
