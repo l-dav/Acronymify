@@ -1,12 +1,12 @@
 
 // Show version
-document.getElementById("version").textContent = 'Version ' + browser.runtime.getManifest().version;
+document.getElementById("version").textContent = 'Version ' + chrome.runtime.getManifest().version;
 
 // Show author
-document.getElementById("author").textContent = 'Author: ' + browser.runtime.getManifest().author;
+document.getElementById("author").textContent = 'Author: ' + chrome.runtime.getManifest().author;
 
 // Show keyboard shortcut
-document.getElementById("keyboard_shortcut").textContent = browser.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
+document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_action.suggested_key.default;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,14 +15,15 @@ document.getElementById("keyboard_shortcut").textContent = browser.runtime.getMa
 
 // save data to local storage
 function save_data(url, local_config, db) {
-	if (url) browser.storage.local.set({url: url});
+	if (url) chrome.storage.local.set({url: url});
 
-	if (local_config) browser.storage.local.set({local_config: local_config});
+	if (local_config) chrome.storage.local.set({local_config: local_config});
 	
-	if (db) browser.storage.local.set({db: db});
+	if (db) chrome.storage.local.set({db: db});
 
-	browser.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked});
+	chrome.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked});
 }
+
 
 // append a definition element
 function appendHTML(parent_id, element) {
@@ -38,12 +39,13 @@ function appendHTML(parent_id, element) {
 	document.getElementById(parent_id).appendChild(div);
 }
 
+
 // return default JSON configuration file, as string
 function get_default_config() {
 	return `{
-		"acronyms_source" : "https://your_server.com/your_db.json" ,
-		"url_add" : "https://your_server.com/pr" ,
-		"mail_add" : "your@mail.com" ,
+		"acronyms_source" : "https://your_server.com/your_db.json",
+		"url_add" : "https://your_server.com/pr",
+		"mail_add" : "your@mail.com",
 		"custom_entries" : [{
 			"Acronym": "your_acronym",
 			"Meaning": "your_full_meaning",
@@ -54,8 +56,10 @@ function get_default_config() {
 	}`;
 }
 
+
 function onExecuted(result) {
-	result = result[0];
+	console.log(result);
+	result = result[0].result;
 	if (result != '') { // if a word is selected
 		document.getElementById("main_page").style.display = "none";
 		document.getElementById("word_definition").style.display = "block";
@@ -89,13 +93,15 @@ function onExecuted(result) {
 	}
 }
 
+
 function reset() {
 	// clear storage
-	browser.storage.local.clear();
+	chrome.storage.local.clear();
 
 	// reload popup
-	browser.runtime.reload();
+	chrome.runtime.reload();
 }
+
 
 function refresh_local_configuration() {
 	// Show that we are loading ...
@@ -105,24 +111,26 @@ function refresh_local_configuration() {
 		local_config = JSON.parse(document.getElementById("local_configuration").value);
 		save_data(false, JSON.stringify(local_config, null, 2), false);
 
-		// Fetch online ressource
 		fetch(local_config["acronyms_source"])
-		.then(response => response.json())
-		.then(response => {
-			document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
+			.then(response => 
+				response.json()
+			)
+			.then(response => {
+				document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
 
-			save_data(false, false, JSON.stringify(response, null, 2));
+				save_data(false, false, JSON.stringify(response, null, 2));
 
-			document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
-			browser.runtime.reload();
-		})
-		.catch(_ => {
-			document.getElementById("online_db_loading_result").textContent = "WARNING: saving OK, but online source fetching failed.";
-		});
+				document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
+				chrome.runtime.reload();
+			})
+			.catch(_ => {
+				document.getElementById("online_db_loading_result").textContent = "WARNING: saving OK, but online source fetching failed.";
+			});
 	} catch (err) {
 		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
 	}
 }
+
 
 function search_in_db() {
 	let word = document.getElementById("search_word_in_db").value;
@@ -153,8 +161,33 @@ function search_in_db() {
 
 }
 
+
 function load_option_page() {
-	let opening = browser.runtime.openOptionsPage();
+	chrome.runtime.openOptionsPage();
+}
+
+
+async function requestPermissions() {
+
+	function onResponse(response) {
+		if (response) {
+			console.log("Permission was granted");
+			document.body.style.display = "block";
+			refresh_local_configuration();
+		} else {
+			console.log("Permission was refused");
+		}
+
+		return chrome.permissions.getAll();
+	}
+
+	const permissionsToRequest = {
+		origins: ["<all_urls>"]
+	}
+
+	document.body.style.display = "none";
+	const response = await chrome.permissions.request(permissionsToRequest);
+	await onResponse(response);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,25 +200,24 @@ document.getElementById("reset_params").onclick = reset;
 // save checkbox value
 document.getElementById("case_sensitive_option").onclick = save_data;
 
-// triggered when we want to save our modifications ; our acronyms
-document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration
-
 // search in DB
 document.getElementById("search_in_db").onclick = search_in_db
 
+// load option page onclick
 document.getElementById("load_option_page").onclick = load_option_page
+
+// request permission if needed
+chrome.permissions.getAll()
+	.then((res) =>  {
+		if (res.origins.length == 0) 	document.getElementById("refresh_local_configuration_button").onclick = requestPermissions;
+		else  						 	document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration;
+	});
 
 
 // Execute a function when the user presses a key on the keyboard
 document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
 	// If the user presses the "Enter" key on the keyboard
-	if (event.key === "Enter") {
-	  // Cancel the default action, if needed
-	  //event.preventDefault();
-	  // Trigger the button element with a click
-	  //document.getElementById("myBtn").click();
-	  search_in_db();
-	}
+	if (event.key === "Enter") search_in_db();
   }); 
 
 
@@ -194,7 +226,7 @@ document.getElementById("search_word_in_db").addEventListener("keypress", functi
 
 var DB = new Object();
 
-browser.storage.local.get() // get all stored data, key/value
+chrome.storage.local.get() // get all stored data, key/value
 	.then((res) => {
 
 		// load DB from local storage. Initialize the variable DB.
@@ -222,14 +254,22 @@ browser.storage.local.get() // get all stored data, key/value
 
 		// if our DB is not empty (if we have entries), we check if a word is selected
 		if (Object.keys(DB).length !== 0) {
-			// One-liner to get the current selected word on the page
-			const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
-
-			// When the popup is loaded, execute the script in the main page and get result
-			browser.tabs.executeScript({code: getWindowSelection}).then(onExecuted);
+			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+				var tab = tabs[0];
+				if (tab) { // Sanity check
+					chrome.scripting.executeScript({
+						target: {
+							tabId: tab.id,
+						  },
+						  func: () => {
+							return window.getSelection() != '' ? window.getSelection().toString() : false;
+						  },
+						}).then((res) => onExecuted(res));
+				}
+			  });
 		}
 
 		// update the case sensitivity checkbox with the storage
 		if (res.case_sensitive != undefined)
 			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
-	});
+});

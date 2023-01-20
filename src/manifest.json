@@ -1,10 +1,11 @@
 {
-	"description": "Recognize your acronyms on the web.",
-	"manifest_version": 2,
+	"description": "Acronymify recognizes your acronyms on the web.",
+	"manifest_version": 3,
 	"name": "Acronymify",
 	"version": "1.0.2",
 	"author": "Léon Davidovski",
-	"homepage_url": "https://no_web_page_for_now_but_maybe_soon.com",
+	"homepage_url": "https://github.com/l-dav/Acronymify",
+	
 	"icons": {
 		"32": "icons/abc_icon_32.png",
 		"48": "icons/abc_icon_48.png",
@@ -14,11 +15,15 @@
 
 	"permissions": [
 		"activeTab",
-		"<all_urls>",
-		"storage"
+		"storage",
+		"scripting"
 	],
 
-	"browser_action": {
+	"host_permissions": [
+		"<all_urls>"
+	],
+
+	"action": {
 		"default_icon": "icons/abc_icon_48.png",
 		"theme_icons": [{
 			"light": "icons/abc_icon_32.png",
@@ -44,15 +49,9 @@
 		"default_title": "Acronymify",
 		"default_popup": "popup/popup.html"
 	},
-
-	"browser_specific_settings": {
-		"gecko": {
-		  	"id": "acronymify@technologyandstrategy.com"
-		}
-	},
 	
 	"commands": {
-		"_execute_browser_action": {
+		"_execute_action": {
 			"suggested_key": {
 				"default": "Ctrl+Shift+F"
 		}
@@ -64,6 +63,4 @@
 		"open_in_tab": true,
 		"browser_style": true
 	}
-	  
-	  
 }

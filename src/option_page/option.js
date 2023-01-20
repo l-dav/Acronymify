@@ -21,7 +21,7 @@ function appendHTML(parent_id, element) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // load storage data
 
-browser.storage.local.get() // get local storage
+chrome.storage.local.get() // get local storage
 	.then((res) => {
 		// load DB from local storage. Initialize the variable DB.
 		if (res.db != undefined) 
