@@ -8,48 +8,73 @@
 
 	<body>
 		<div id="main_page">
-			<h1>Acronymify</h1>
-			<h2 id="version"></h2>
-			<p>
-				Get informations about your acronyms.<br>
-				Select the word you don't know, then <span id="keyboard_shortcut"></span>
-			</p>
 
-			<hr/>
+			<div class="scrollmenu">
+				<a class="menuItem selected" id="menu_home">Home</a>
+				<a class="menuItem" id="menu_options">Options</a>
+				<a class="menuItem" id="menu_config">Config</a>
+				<a class="menuItem" id="menu_about">About</a>
+			</div>
 
-			<input type="text" id="search_word_in_db" placeholder="Search DB">
-			<button type="button" id="search_in_db">Search</button>
-			<div id="word_definition_search"></div>
 
-			<hr/>
+
+			<div id="home" class="part">
+				<h1>Acronymify</h1>
+				<h2 id="version"></h2>
+
+				<input type="text" id="search_word_in_db" placeholder="Search DB">
+				<button type="button" id="search_in_db">Search</button>
+
+				<br>
+				<div id="word_definition_search"></div>
+
+				<br>
+				<button type="button" id="load_option_page">Open DB</button>
+			</div>
+
+
+
+			<div id="about" class="part" style="display: none;">
+				<p>
+					Get informations about your acronyms.<br>
+					Select the word you don't know, then <span id="keyboard_shortcut"></span>
+				</p>
+
+				<p id="author"></p>
+				<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
+
+				<p>
+					<a id="suggestion_acronym" href="mailto:l.davidovski@technologyandstrategy.com">Suggest new acronyms (mail)</a>
+					<a id="url_add" href="http://no_web_site.com" target="_blank" rel="noopener noreferrer">Suggest new acronyms (git)</a>
+				</p>
+
+				<p><button type="button" id="reset_params">Reset extension</button></p>
+			</div>
 			
-			<div>
+
+			
+			<div id="options" class="part" style="display: none;">
 				<p>Options:</p>
 				<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
 				<label for="case_sensitive_option">Case sensitive</label>
 			</div>
-			
-			<p>Config:</p>
 
-			<textarea id="local_configuration"></textarea>
-			<br>
-			<button type="button" id="refresh_local_configuration_button">Update</button>
+
+
+			<div id="config" class="part" style="display: none;">
+				<p>Config:</p>
+
+				<textarea id="local_configuration"></textarea>
+				<br>
+				<button type="button" id="refresh_local_configuration_button">Update</button>
+
+			</div>
+			
+
 
 			<p id="online_db_loading_result"></p>
 
-			<button type="button" id="load_option_page">Open DB</button>
-
-			<hr/>
-
-			<p id="author"></p>
-			<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
-
-			<p>
-				<a id="suggestion_acronym" href="mailto:l.davidovski@technologyandstrategy.com">Suggest new acronyms (mail)</a>
-				<a id="url_add" href="http://no_web_site.com" target="_blank" rel="noopener noreferrer">Suggest new acronyms (git)</a>
-			</p>
-
-			<p><button type="button" id="reset_params">Reset extension</button></p>
+			
 		</div>
 
 		<div id="word_definition"></div>

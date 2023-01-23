@@ -89,7 +89,8 @@ function onExecuted(result) {
 			document.getElementById("word_definition").textContent = "Unknown word: " + result;
 		}
 	} else {
-		document.getElementById("online_db_loading_result").textContent = DB['entries'].length + " entries loaded.";
+		// document.getElementById("online_db_loading_result").textContent = DB['entries'].length + " entries loaded.";
+		document.getElementById("search_word_in_db").placeholder = "Search DB (" + DB['entries'].length + " entries)";
 	}
 }
 
@@ -273,3 +274,27 @@ chrome.storage.local.get() // get all stored data, key/value
 		if (res.case_sensitive != undefined)
 			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
 });
+
+
+///////////////////////////////////////////////
+
+
+document.getElementById("menu_home").onclick = function() {changepage("home");};
+document.getElementById("menu_config").onclick = function() {changepage("config");};
+document.getElementById("menu_options").onclick = function() {changepage("options");};
+document.getElementById("menu_about").onclick = function() {changepage("about");};
+
+function changepage(id) {
+	var slides = document.getElementsByClassName("part");
+	for (var i = 0; i < slides.length; i++) {
+		slides.item(i).style.display = "none";
+	}
+
+	var slides = document.getElementsByClassName("menuItem");
+	for (var i = 0; i < slides.length; i++) {
+		slides.item(i).classList.remove("selected");
+	}
+
+	document.getElementById("menu_" + id).classList.add("selected");
+	document.getElementById(id).style.display = "block";
+}
