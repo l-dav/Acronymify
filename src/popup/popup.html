@@ -9,7 +9,7 @@
 	<body>
 		<div id="main_page">
 
-			<div class="scrollmenu">
+			<div class="scrollmenu" id="scrollmenu">
 				<a class="menuItem selected" id="menu_home">Home</a>
 				<a class="menuItem" id="menu_options">Options</a>
 				<a class="menuItem" id="menu_config">Config</a>
@@ -17,19 +17,23 @@
 			</div>
 
 
+			<h1>Acronymify</h1>
+			<h2 id="version"></h2>
+
 
 			<div id="home" class="part">
-				<h1>Acronymify</h1>
-				<h2 id="version"></h2>
 
+				<br>
 				<input type="text" id="search_word_in_db" placeholder="Search DB">
 				<button type="button" id="search_in_db">Search</button>
-
+			
 				<br>
 				<div id="word_definition_search"></div>
 
 				<br>
-				<button type="button" id="load_option_page">Open DB</button>
+				<div style="text-align: center;">
+					<button type="button" id="load_option_page">Open DB</button>
+				</div>
 			</div>
 
 
@@ -48,7 +52,7 @@
 					<a id="url_add" href="http://no_web_site.com" target="_blank" rel="noopener noreferrer">Suggest new acronyms (git)</a>
 				</p>
 
-				<p><button type="button" id="reset_params">Reset extension</button></p>
+				<p style="text-align: center;"><button type="button" id="reset_params">Reset extension</button></p>
 			</div>
 			
 
@@ -62,11 +66,21 @@
 
 
 			<div id="config" class="part" style="display: none;">
-				<p>Config:</p>
+				<div id="ask_permissions">
+					Acronymify needs to retrieve its online databases to work. Please accept the necessary permissions by clicking the following button:
+					<br>
+					<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button22">Give permissions</button></p>
+				</div>
 
-				<textarea id="local_configuration"></textarea>
-				<br>
-				<button type="button" id="refresh_local_configuration_button">Update</button>
+				<!-- <p id="first_time" style="display: none;">First time in Acronymify right? Update the JSON config if necessary, then click "Update".</p> -->
+
+				<div id="default_config">
+					<p id="first_time" style="display: none;"><span style="font-weight: bold;">First time in Acronymify? &#128512;</span><br>Here you will build your local database.<br>Update the JSON config if necessary, then click "Update".</p>
+
+					Config:
+					<textarea id="local_configuration"></textarea>
+					<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button></p>
+				</div>
 
 			</div>
 			

@@ -43,7 +43,7 @@ function appendHTML(parent_id, element) {
 // return default JSON configuration file, as string
 function get_default_config() {
 	return `{
-		"acronyms_source" : "https://your_server.com/your_db.json",
+		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/new_interface/acronyms/computer.json",
 		"url_add" : "https://your_server.com/pr",
 		"mail_add" : "your@mail.com",
 		"custom_entries" : [{
@@ -59,7 +59,8 @@ function get_default_config() {
 
 function onExecuted(result) {
 	console.log(result);
-	result = result[0].result;
+
+	if (result[0]) result = result[0].result;
 	if (result != '') { // if a word is selected
 		document.getElementById("main_page").style.display = "none";
 		document.getElementById("word_definition").style.display = "block";
@@ -191,6 +192,30 @@ async function requestPermissions() {
 	await onResponse(response);
 }
 
+
+async function hide_popup_and_ask_permission() {
+
+	function onResponse(response) {
+		if (response) {
+			console.log("Permission was granted");
+		} else {
+			console.log("Permission was refused");
+		}
+
+		return chrome.permissions.getAll();
+	}
+
+	const permissionsToRequest = {
+		origins: ["<all_urls>"]
+	}
+
+	document.body.style.display = "none";
+	const response = await chrome.permissions.request(permissionsToRequest);
+	await onResponse(response);
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add click listener
 
@@ -207,13 +232,21 @@ document.getElementById("search_in_db").onclick = search_in_db
 // load option page onclick
 document.getElementById("load_option_page").onclick = load_option_page
 
+
 // request permission if needed
+// chrome.permissions.getAll()
+// 	.then((res) =>  {
+// 		if (res.origins.length == 0) 	document.getElementById("default_config").style.display = "none";
+// 		else  						 	document.getElementById("ask_permissions").style.display = "none";
+// 	});
+
+document.getElementById("refresh_local_configuration_button22").onclick = hide_popup_and_ask_permission;
+
 chrome.permissions.getAll()
 	.then((res) =>  {
 		if (res.origins.length == 0) 	document.getElementById("refresh_local_configuration_button").onclick = requestPermissions;
 		else  						 	document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration;
 	});
-
 
 // Execute a function when the user presses a key on the keyboard
 document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
@@ -273,6 +306,27 @@ chrome.storage.local.get() // get all stored data, key/value
 		// update the case sensitivity checkbox with the storage
 		if (res.case_sensitive != undefined)
 			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
+
+
+
+		if (res.local_config == undefined) {
+			chrome.permissions.getAll()
+				.then((res) =>  {
+					if (res.origins.length == 0) {
+						console.log("skjdhfjd");
+						document.getElementById("default_config").style.display = "none";
+					} else {
+						console.log("vvvvvvvvvvvvvvvvvvv");
+						document.getElementById("ask_permissions").style.display = "none";
+					}
+				});
+
+			changepage("config");
+			document.getElementById("first_time").style.display = "block";
+			document.getElementById("scrollmenu").style.display = "none";
+		} else {
+			document.getElementById("ask_permissions").style.display = "none";
+		}
 });
 
 
