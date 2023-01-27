@@ -9,25 +9,29 @@
 	<body>
 		<div id="main_page">
 
+
+			<!-- Navigation bar -->
 			<div class="scrollmenu" id="scrollmenu">
 				<a class="menuItem selected" id="menu_home">Home</a>
 				<a class="menuItem" id="menu_options">Options</a>
 				<a class="menuItem" id="menu_config">Config</a>
+				<a class="menuItem" id="menu_help">Help</a>
 				<a class="menuItem" id="menu_about">About</a>
 			</div>
 
 
+			<!-- Show title everywhere everytime  -->
 			<h1>Acronymify</h1>
-			<h2 id="version"></h2>
 
 
+			<!-- "Home" tab -->
 			<div id="home" class="part">
 
 				<br>
 				<input type="text" id="search_word_in_db" placeholder="Search DB">
 				<button type="button" id="search_in_db">Search</button>
-			
 				<br>
+				
 				<div id="word_definition_search"></div>
 
 				<br>
@@ -37,12 +41,9 @@
 			</div>
 
 
-
+			<!-- "About" tab -->
 			<div id="about" class="part" style="display: none;">
-				<p>
-					Get informations about your acronyms.<br>
-					Select the word you don't know, then <span id="keyboard_shortcut"></span>
-				</p>
+				<h2 id="version"></h2>
 
 				<p id="author"></p>
 				<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
@@ -56,7 +57,7 @@
 			</div>
 			
 
-			
+			<!-- "Options" tab -->
 			<div id="options" class="part" style="display: none;">
 				<p>Options:</p>
 				<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
@@ -64,29 +65,36 @@
 			</div>
 
 
-
-			<div id="config" class="part" style="display: none;">
-				<div id="ask_permissions">
-					Acronymify needs to retrieve its online databases to work. Please accept the necessary permissions by clicking the following button:
-					<br>
-					<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button22">Give permissions</button></p>
-				</div>
-
-				<!-- <p id="first_time" style="display: none;">First time in Acronymify right? Update the JSON config if necessary, then click "Update".</p> -->
-
-				<div id="default_config">
-					<p id="first_time" style="display: none;"><span style="font-weight: bold;">First time in Acronymify? &#128512;</span><br>Here you will build your local database.<br>Update the JSON config if necessary, then click "Update".</p>
-
-					Config:
-					<textarea id="local_configuration"></textarea>
-					<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button></p>
-				</div>
-
+			<!-- "Help" tab -->
+			<div id="help" class="part" style="display: none;">
+				<p>How to use Acronymify?</p>
+				<p>You must first set up your local database. This database will contain all the terms that Acronymify will recognize.</p>
+				<p>In the config tab: </p>
+				<p>- you can link an online JSON file.</p>
+				<p>- you can enter your own custom words.</p>
+				<p>Once your database is set up, you can use Acronymify on any web page by selecting a word and using the shortcut <span id="keyboard_shortcut"></span> to open its definition, or by clicking on the Acronymify popup.</p>
+				<p>Additionally, you can use the search bar in the home tab to explore your acronyms.</p>
 			</div>
-			
 
 
-			<p id="online_db_loading_result"></p>
+			<!-- "Config" tab -->
+			<div id="config" class="part" style="display: none;">
+				<p id="first_time" style="display: none;"><span style="font-weight: bold;">Your local database looks empty &#128566;</span><br>Update the JSON config if necessary, then click "Update" to build your local database.</p>
+
+				<p>Your config:</p>
+				<textarea id="local_configuration"></textarea>
+
+				<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button></p>
+
+				<p id="online_db_loading_result"></p>
+			</div>
+
+			<!-- Global page to ask permissions -->
+			<div id="ask_permissions" style="display: none;">
+				Welcome to Acronymify &#128512;<br> Acronymify needs to retrieve its online databases to work. <br>Please accept the necessary permissions by clicking the following button:
+				<br>
+				<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button22">Give permissions</button></p>
+			</div>
 
 			
 		</div>

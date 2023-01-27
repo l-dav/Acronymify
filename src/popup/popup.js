@@ -56,6 +56,10 @@ function get_default_config() {
 	}`;
 }
 
+function setNbWordInDB() {
+	document.getElementById("search_word_in_db").placeholder = "Search DB (" + DB['entries'].length + " entries)";
+}
+
 
 function onExecuted(result) {
 	console.log(result);
@@ -309,24 +313,44 @@ chrome.storage.local.get() // get all stored data, key/value
 
 
 
+		// if (res.local_config == undefined) {
+		// 	chrome.permissions.getAll()
+		// 		.then((res) =>  {
+		// 			if (res.origins.length == 0) {
+		// 				console.log("skjdhfjd");
+		// 				document.getElementById("default_config").style.display = "none";
+		// 			} else {
+		// 				console.log("vvvvvvvvvvvvvvvvvvv");
+		// 				document.getElementById("ask_permissions").style.display = "none";
+		// 			}
+		// 		});
+
+		// 	changepage("config");
+		// 	document.getElementById("first_time").style.display = "block";
+		// 	document.getElementById("scrollmenu").style.display = "none";
+		// } else {
+		// 	document.getElementById("ask_permissions").style.display = "none";
+		// }
+
 		if (res.local_config == undefined) {
 			chrome.permissions.getAll()
 				.then((res) =>  {
 					if (res.origins.length == 0) {
-						console.log("skjdhfjd");
-						document.getElementById("default_config").style.display = "none";
+						document.getElementById("home").style.display = "none";
+						document.getElementById("scrollmenu").style.display = "none";
+						document.getElementById("ask_permissions").style.display = "block";
 					} else {
-						console.log("vvvvvvvvvvvvvvvvvvv");
-						document.getElementById("ask_permissions").style.display = "none";
+						changepage("config");
+						document.getElementById("first_time").style.display = "block";
 					}
 				});
 
-			changepage("config");
-			document.getElementById("first_time").style.display = "block";
-			document.getElementById("scrollmenu").style.display = "none";
-		} else {
-			document.getElementById("ask_permissions").style.display = "none";
-		}
+			// changepage("config");
+			// document.getElementById("first_time").style.display = "block";
+			// document.getElementById("scrollmenu").style.display = "none";
+		} //else {
+			// document.getElementById("ask_permissions").style.display = "none";
+		// }
 });
 
 
@@ -337,6 +361,7 @@ document.getElementById("menu_home").onclick = function() {changepage("home");};
 document.getElementById("menu_config").onclick = function() {changepage("config");};
 document.getElementById("menu_options").onclick = function() {changepage("options");};
 document.getElementById("menu_about").onclick = function() {changepage("about");};
+document.getElementById("menu_help").onclick = function() {changepage("help");};
 
 function changepage(id) {
 	var slides = document.getElementsByClassName("part");
