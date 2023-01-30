@@ -1,20 +1,77 @@
 # Acronymify
 
-Acronymify is a Firefox extension. You can download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
-It recognizes all your acronyms on the web and show their definition.
+Acronymify is a browser extension that enables you to define acronyms, recognize them on web pages, and display their definition.
 
-![Logo](images/acronymify_long_logo.png "Acronymify Logo")
+![Logo](images/abc_long.png "Acronymify Logo")
+
+
+## Installation
+
+- For Firefox: download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
+- For other browsers:
+    1. Download the zip release from the [Releases](https://github.com/l-dav/Acronymify/releases/tag/release_v1.0.2).
+    2. Then:
+        - Chrome: go to "chrome://extensions/". Toggle the "Developer mode" option. Drag-n-Drop the .zip.
+        - Edge: go to "edge://extensions/". Toggle the "Developer mode" option. Drag-n-Drop the .zip.
+        - Opera: go to "opera://extensions". Toggle the "Developer mode" option. Drag-n-Drop the .zip.
+        - Safari: not yet ;)
 
 
 ## Usage
 
 ![Main page](images/popup_home_long.PNG "Main page")
 
-To start, select an online dataset to retrieve or add custom entries in the configuration section. Once you have clicked the "Update" button, you will be able to fully use Acronymify.
+When you load Acronymify for the first time, you will be guide to build your local database.
 
-Next, click on a word, and activate the extension by using the shortcut or clicking the extension logo. If the word's definition is known, it will be displayed.
+Then, click on a word on any web page, and activate the extension by using the shortcut or clicking the extension logo. If the word's definition is known, it will be displayed.
 
-Additionally, you can click the "Open DB" button to view all the words recognized by the extension.
+
+### Use an online source
+
+From the config tab, you can link an online JSON dataset.
+
+The online database must follow the following JSON format:
+```json
+{
+    "entries": [
+        {
+            "Acronym": "acronym",
+            "Meaning": "meaning",
+            "Hint": "hint",
+            "Alternatives": "alternatives",
+            "url": "url"
+        }, {
+            "Acronym": "acronym",
+            "Meaning": "meaning",
+            "Hint": "hint",
+            "Alternatives": "alternatives",
+            "url": "url"
+        }
+    ]
+}
+```
+
+### Add custom entries
+
+You can specified your own custom entries
+
+The configuration must follow the following JSON format:
+```json
+{
+    "acronyms_source": "https://url_to_online_db.com",
+    "url_add": "https://url_to_db_repository.com",
+    "mail_add": "source@mail.com",
+    "custom_entries": [
+        {
+            "Acronym": "your_acronym",
+            "Meaning": "your_full_meaning",
+            "Hint": "your_definition",
+            "Alternatives": "your_alternatives",
+            "url": "your_url"
+        }
+    ]
+}
+```
 
 ## Documentation
 
@@ -40,17 +97,6 @@ To sign the extension, generate the .xpi archive and list the new version on AMO
 > make sign CHANNEL=listed
 
 
-### Installation
-If you have a signed .xpi file:
-- open it with Firefox (e.g. drag-and-drop) and accept the installation.
-
-If you have the source code:
-- go to "about:debugging#/runtime/this-firefox" in Firefox
-- "Load Temporary Add-on..." and select any file inside the source code root folder (e.g. "manifest.json").
-
-You can now use Acronymify.
-
-
 ### Code algorithm
 
 The popup is design in plain HTML/CSS, and all interactions are written in plain JavaScript.
@@ -70,44 +116,3 @@ We add click listener to several events:
 - Case sensitive checkbox
 - Fetching button: to download an online database.
 - Refresh button: reload the extension
-
-### Formats
-
-The online database must follow the following JSON format:
-```json
-{
-    "entries": [
-        {
-            "Acronym": "acronym",
-            "Meaning": "meaning",
-            "Hint": "hint",
-            "Alternatives": "alternatives",
-            "url": "url"
-        }, {
-            "Acronym": "acronym",
-            "Meaning": "meaning",
-            "Hint": "hint",
-            "Alternatives": "alternatives",
-            "url": "url"
-        }
-    ]
-}
-```
-
-The configuration must follow the following JSON format:
-```json
-{
-    "acronyms_source": "https://url_to_online_db.com",
-    "url_add": "https://url_to_db_repository.com",
-    "mail_add": "source@mail.com",
-    "custom_entries": [
-        {
-            "Acronym": "your_acronym",
-            "Meaning": "your_full_meaning",
-            "Hint": "your_definition",
-            "Alternatives": "your_alternatives",
-            "url": "your_url"
-        }
-    ]
-}
-```
