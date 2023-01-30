@@ -3,12 +3,12 @@
 Acronymify is a Firefox extension. You can download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
 It recognizes all your acronyms on the web and show their definition.
 
-![Logo](src/icons/abc_icon_128.png "Acronymify Logo")
+![Logo](images/acronymify_long_logo.png "Acronymify Logo")
 
 
 ## Usage
 
-![Main page](images/main_popup.PNG "Main page")
+![Main page](images/popup_home_long.PNG "Main page")
 
 To start, select an online dataset to retrieve or add custom entries in the configuration section. Once you have clicked the "Update" button, you will be able to fully use Acronymify.
 
