@@ -294,7 +294,9 @@ chrome.storage.local.get() // get all stored data, key/value
 		if (Object.keys(DB).length !== 0) {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				var tab = tabs[0];
-				if (tab) { // Sanity check
+				console.log("tab.url");
+				console.log(tab.url);
+				if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
 					chrome.scripting.executeScript({
 						target: {
 							tabId: tab.id,
@@ -303,6 +305,8 @@ chrome.storage.local.get() // get all stored data, key/value
 							return window.getSelection() != '' ? window.getSelection().toString() : false;
 						  },
 						}).then((res) => onExecuted(res));
+				} else {
+					onExecuted(false);
 				}
 			  });
 		}
