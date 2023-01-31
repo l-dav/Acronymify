@@ -2,7 +2,7 @@
 	"description": "Acronymify recognizes your acronyms on the web.",
 	"manifest_version": 3,
 	"name": "Acronymify",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"author": "Léon Davidovski",
 	"homepage_url": "https://github.com/l-dav/Acronymify",
 	
@@ -62,5 +62,12 @@
 		"page": "option_page/option.html",
 		"open_in_tab": true,
 		"browser_style": true
-	}
+	},
+
+	"browser_specific_settings": {
+		"gecko": {
+		  "id": "acronymify@technologyandstrategy.com"
+		}
+	  }
+	  
 }
