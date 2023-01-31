@@ -26,9 +26,16 @@ When you load Acronymify for the first time, you will be guide to build your loc
 Then, click on a word on any web page, and activate the extension by using the shortcut or clicking the extension logo. If the word's definition is known, it will be displayed.
 
 
-### Use an online source
+### Config tab
 
-From the config tab, you can link an online JSON dataset.
+Configure your local database from the config tab.
+Several fields are provided:
+- `acronyms_source`: URL to an online source dataset. See "Use an online source".
+- `url_add`: URL to your source repository, if needed.
+- `mail_add`: a contact URL to propose new words, if needed.
+- `custom_entries`: define custom local entries. See "Add custom entries".
+
+#### Use an online source
 
 The online database must follow the following JSON format:
 ```json
@@ -51,41 +58,47 @@ The online database must follow the following JSON format:
 }
 ```
 
-### Add custom entries
+Specify the URL to the raw JSON data in the field `acronyms_source`.
 
-You can specified your own custom entries
+#### Add custom entries
 
-The configuration must follow the following JSON format:
+You can specified your own custom entries.
+
+Your entries must follow the following JSON format:
+
 ```json
-{
-    "acronyms_source": "https://url_to_online_db.com",
-    "url_add": "https://url_to_db_repository.com",
-    "mail_add": "source@mail.com",
-    "custom_entries": [
-        {
-            "Acronym": "your_acronym",
-            "Meaning": "your_full_meaning",
-            "Hint": "your_definition",
-            "Alternatives": "your_alternatives",
-            "url": "your_url"
-        }
-    ]
-}
+[
+    {
+        "Acronym": "your acronym",
+        "Meaning": "meanings here",
+        "Hint": "an explanation",
+        "Alternatives": "alternative words",
+        "url": "an URL"
+    }, 
+    {
+        "Acronym": "your second acronym",
+        "Meaning": "meanings here",
+        "Hint": "an explanation",
+        "Alternatives": "alternative words",
+        "url": "an URL"
+    }
+]
 ```
+
+Add them to the field `custom_entries`.
 
 ## Documentation
 
-Acronymify is a Firefox extension.
-
+Acronymify is a web extension.
 
 ### Overview
 
-The source code is in the folder `./src/`. It contains a file "manifest.json" containing metadata about the extension, as specified in [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
+The source code is in the folder `./src/`. It contains a file "manifest.json" containing metadata about the extension, as specified in the [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
 
 
 ### Build, Sign, Publish
 
-The Makefile allows you to build, sign, publish the extension.
+The Makefile allows you to build, sign, publish the extension (Firefox only for now).
 
 To build the extension (generate an unsigned local .xpi archive ; for testing purposes):
 > make build
@@ -96,23 +109,10 @@ To sign the extension and generate the .xpi archive (no public listing ; for tes
 To sign the extension, generate the .xpi archive and list the new version on AMO:
 > make sign CHANNEL=listed
 
+## License
 
-### Code algorithm
+[GPLv3](LICENSE)
 
-The popup is design in plain HTML/CSS, and all interactions are written in plain JavaScript.
+## Authors
 
-Each time the extension popup is open, it is reload.
-
-We start by displaying dynamic informations from the file "manifest.json": version, author, keyboard shortcut.
-
-Then we check the local storage:
-- if a local configuration is stored, it is loaded
-- if not, then we load a default configuration
-
-Then, we update the page with this informations: url_add, mailto, case sensitive option, ...
-
-We add click listener to several events:
-- Reset button: on click on it, we clear the local storage and reload the extension. It will be clean as a new installation.
-- Case sensitive checkbox
-- Fetching button: to download an online database.
-- Refresh button: reload the extension
+- [@l-dav](https://github.com/l-dav)
