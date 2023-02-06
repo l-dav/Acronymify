@@ -173,53 +173,6 @@ function load_option_page() {
 }
 
 
-async function requestPermissions() {
-
-	function onResponse(response) {
-		if (response) {
-			console.log("Permission was granted");
-			document.body.style.display = "block";
-			refresh_local_configuration();
-		} else {
-			console.log("Permission was refused");
-		}
-
-		return chrome.permissions.getAll();
-	}
-
-	const permissionsToRequest = {
-		origins: ["<all_urls>"]
-	}
-
-	document.body.style.display = "none";
-	const response = await chrome.permissions.request(permissionsToRequest);
-	await onResponse(response);
-}
-
-
-async function hide_popup_and_ask_permission() {
-
-	function onResponse(response) {
-		if (response) {
-			console.log("Permission was granted");
-		} else {
-			console.log("Permission was refused");
-		}
-
-		return chrome.permissions.getAll();
-	}
-
-	const permissionsToRequest = {
-		origins: ["<all_urls>"]
-	}
-
-	document.body.style.display = "none";
-	const response = await chrome.permissions.request(permissionsToRequest);
-	await onResponse(response);
-}
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add click listener
 
@@ -236,21 +189,7 @@ document.getElementById("search_in_db").onclick = search_in_db
 // load option page onclick
 document.getElementById("load_option_page").onclick = load_option_page
 
-
-// request permission if needed
-// chrome.permissions.getAll()
-// 	.then((res) =>  {
-// 		if (res.origins.length == 0) 	document.getElementById("default_config").style.display = "none";
-// 		else  						 	document.getElementById("ask_permissions").style.display = "none";
-// 	});
-
-document.getElementById("refresh_local_configuration_button22").onclick = hide_popup_and_ask_permission;
-
-chrome.permissions.getAll()
-	.then((res) =>  {
-		if (res.origins.length == 0) 	document.getElementById("refresh_local_configuration_button").onclick = requestPermissions;
-		else  						 	document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration;
-	});
+document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration;
 
 // Execute a function when the user presses a key on the keyboard
 document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
@@ -314,58 +253,17 @@ chrome.storage.local.get() // get all stored data, key/value
 		// update the case sensitivity checkbox with the storage
 		if (res.case_sensitive != undefined)
 			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
-
-
-
-		// if (res.local_config == undefined) {
-		// 	chrome.permissions.getAll()
-		// 		.then((res) =>  {
-		// 			if (res.origins.length == 0) {
-		// 				console.log("skjdhfjd");
-		// 				document.getElementById("default_config").style.display = "none";
-		// 			} else {
-		// 				console.log("vvvvvvvvvvvvvvvvvvv");
-		// 				document.getElementById("ask_permissions").style.display = "none";
-		// 			}
-		// 		});
-
-		// 	changepage("config");
-		// 	document.getElementById("first_time").style.display = "block";
-		// 	document.getElementById("scrollmenu").style.display = "none";
-		// } else {
-		// 	document.getElementById("ask_permissions").style.display = "none";
-		// }
-
-		if (res.local_config == undefined) {
-			chrome.permissions.getAll()
-				.then((res) =>  {
-					if (res.origins.length == 0) {
-						document.getElementById("home").style.display = "none";
-						document.getElementById("scrollmenu").style.display = "none";
-						document.getElementById("ask_permissions").style.display = "block";
-					} else {
-						changepage("config");
-						document.getElementById("first_time").style.display = "block";
-					}
-				});
-
-			// changepage("config");
-			// document.getElementById("first_time").style.display = "block";
-			// document.getElementById("scrollmenu").style.display = "none";
-		} //else {
-			// document.getElementById("ask_permissions").style.display = "none";
-		// }
 });
 
 
 ///////////////////////////////////////////////
 
 
-document.getElementById("menu_home").onclick = function() {changepage("home");};
-document.getElementById("menu_config").onclick = function() {changepage("config");};
-document.getElementById("menu_options").onclick = function() {changepage("options");};
-document.getElementById("menu_about").onclick = function() {changepage("about");};
-document.getElementById("menu_help").onclick = function() {changepage("help");};
+document.getElementById("menu_home").onclick    = function() { changepage("home");   };
+document.getElementById("menu_config").onclick  = function() { changepage("config"); };
+document.getElementById("menu_options").onclick = function() { changepage("options");};
+document.getElementById("menu_about").onclick   = function() { changepage("about");  };
+document.getElementById("menu_help").onclick    = function() { changepage("help");   };
 
 function changepage(id) {
 	var slides = document.getElementsByClassName("part");
