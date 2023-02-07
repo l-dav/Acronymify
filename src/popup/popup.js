@@ -251,33 +251,38 @@ function changepage(id) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// add click listener
+// add click listeners
 
 
 // call reset function onclick
-document.getElementById("reset_params").onclick = reset;
+document.getElementById("reset_params").onclick                       = reset;
 
 // fetch online source
-document.getElementById("fetch").onclick = fetch_url;
+document.getElementById("fetch").onclick                              = fetch_url;
 
 // save checkbox value
-document.getElementById("case_sensitive_option").onclick = save_data;
+document.getElementById("case_sensitive_option").onclick              = save_data;
 
 // search in DB
-document.getElementById("search_in_db").onclick = search_in_db
+document.getElementById("search_in_db").onclick                       = search_in_db
 
 // load option page onclick
-document.getElementById("load_option_page").onclick = load_option_page
+document.getElementById("load_option_page").onclick                   = load_option_page
 
 // save custom acronyms
 document.getElementById("refresh_local_configuration_button").onclick = save_custom_words;
+
+document.getElementById("menu_home").onclick                          = function() { changepage("home");   };
+document.getElementById("menu_config").onclick                        = function() { changepage("config"); };
+document.getElementById("menu_options").onclick                       = function() { changepage("options");};
+document.getElementById("menu_about").onclick                         = function() { changepage("about");  };
+document.getElementById("menu_help").onclick                          = function() { changepage("help");   };
 
 // Execute a function when the user presses a key on the keyboard
 document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
 	// If the user presses the "Enter" key on the keyboard
 	if (event.key === "Enter") search_in_db();
-}); 
-
+});
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // load storage data
@@ -336,13 +341,3 @@ chrome.storage.local.get() // get all stored data, key/value
 		
 		setNbWordInDB();
 });
-
-
-///////////////////////////////////////////////
-
-
-document.getElementById("menu_home").onclick    = function() { changepage("home");   };
-document.getElementById("menu_config").onclick  = function() { changepage("config"); };
-document.getElementById("menu_options").onclick = function() { changepage("options");};
-document.getElementById("menu_about").onclick   = function() { changepage("about");  };
-document.getElementById("menu_help").onclick    = function() { changepage("help");   };
