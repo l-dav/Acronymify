@@ -9,12 +9,13 @@ Acronymify is a browser extension that enables you to define acronyms, recognize
 
 - Firefox: download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
 - Chrome: download it from [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca).
-- Opera: download it from [Opera addons](https://addons.opera.com/en-gb/extensions/details/acronymify/)
-- Other browsers:
-    1. Download a zip release from the [Releases](https://github.com/l-dav/Acronymify/releases/tag/release_v1.0.2).
-    2. Then:
-        - Edge: go to "edge://extensions/". Toggle the "Developer mode" option. Drag-n-Drop the .zip.
-        - Safari: not yet ;)
+- Opera: download it from [Opera addons](https://addons.opera.com/en-gb/extensions/details/acronymify/).
+
+- Firefox Mobile: Acronymify is compatible with Firefox for Android. Follow this [tutorial](https://support.mozilla.org/en-US/kb/extended-add-support) (advanced users).
+
+- Edge: Download a .zip release from the [Releases](https://github.com/l-dav/Acronymify/releases/). Then go to "edge://extensions/". Toggle the "Developer mode" option. Drag-n-Drop the .zip.
+
+- Safari: ~~too expensive~~ not available. But you may create it yourself: download a [release](https://github.com/l-dav/Acronymify/releases/) and follow [this tutorial](https://developer.apple.com/documentation/safariservices/safari_web_extensions/converting_a_web_extension_for_safari).
 
 
 ## Usage
