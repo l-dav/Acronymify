@@ -2,7 +2,7 @@
 	"description": "Acronymify recognizes your acronyms on the web.",
 	"manifest_version": 2,
 	"name": "Acronymify",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"author": "Léon Davidovski",
 	"homepage_url": "https://github.com/l-dav/Acronymify",
 	
