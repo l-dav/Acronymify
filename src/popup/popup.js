@@ -55,7 +55,7 @@ function appendHTML(parent_id, element) {
  */
 function get_default_config() {
 	return `{
-		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/new_interface/acronyms/computer.json",
+		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/computer.json",
 		"url_add" : "https://your_server.com/pr",
 		"mail_add" : "your@mail.com",
 		"custom_entries" : [{
@@ -141,6 +141,7 @@ function reset() {
 function save_custom_words() {
 	try {
 		save_data(false, JSON.stringify(JSON.parse(document.getElementById("local_configuration").value), null, 2), false);
+		console.log(JSON.parse(document.getElementById("local_configuration").value));
 
 		document.getElementById("online_db_loading_result").textContent = "Saving successful.";
 
@@ -211,8 +212,12 @@ function fetch_url() {
 			)
 			.then(response => {
 
+				console.log(response);
+
 				local_config["url_add"] = response["url_add"];
 				local_config["mail_add"] = response["mail_add"];
+
+				console.log(local_config);
 
 				save_data(JSON.stringify(local_config, null, 2), false, JSON.stringify(response['entries'], null, 2));
 
@@ -222,7 +227,7 @@ function fetch_url() {
 			})
 			.catch(err => {
 				console.log(err);
-				document.getElementById("online_db_loading_result").textContent = "WARNING: saving OK, but online source fetching failed.";
+				document.getElementById("online_db_loading_result").textContent = "ERROR: online source fetching failed (check URL or CORS policy).";
 			});
 	} catch (err) {
 		console.log(err);
@@ -340,4 +345,10 @@ chrome.storage.local.get() // get all stored data, key/value
 			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
 		
 		setNbWordInDB();
+
+
+		if (res.local_config == undefined) {
+			changepage("config");
+			document.getElementById("first_time").style.display = "block";
+		}
 });

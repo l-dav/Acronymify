@@ -24,13 +24,13 @@ function appendHTML(parent_id, element) {
 chrome.storage.local.get() // get local storage
 	.then((res) => {
 		// load DB from local storage. Initialize the variable DB.
-		if (res.db != undefined) 
-			JSON.parse(res.db)['entries'].forEach(element => {
+		if (res.online_acronyms != undefined) 
+			JSON.parse(res.online_acronyms).forEach(element => {
 				appendHTML("word_definition", element);
 			});
 
-		if (res.local_config)
-			JSON.parse(res.local_config)['custom_entries'].forEach(element => {
+		if (res.custom_acronyms)
+			JSON.parse(res.custom_acronyms).forEach(element => {
 				appendHTML("word_definition", element);
 			});
 	});
