@@ -6,7 +6,7 @@ document.getElementById("version").textContent = 'Version ' + chrome.runtime.get
 document.getElementById("author").textContent = 'Author: ' + chrome.runtime.getManifest().author;
 
 // Show keyboard shortcut
-document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_action.suggested_key.default;
+document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,13 +20,15 @@ document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getMan
  * @param {string} online_acronyms JSON string containing acronyms defined from an online source
  */
 function save_data(local_config, custom_acronyms, online_acronyms) {
-	if (local_config)     chrome.storage.local.set({local_config: local_config});
+	console.log("saving");
+
+	if (local_config)     chrome.storage.local.set({"local_config": local_config});
 	
-	if (custom_acronyms)  chrome.storage.local.set({custom_acronyms: custom_acronyms});
+	if (custom_acronyms)  chrome.storage.local.set({"custom_acronyms": custom_acronyms});
 
-	if (online_acronyms)  chrome.storage.local.set({online_acronyms: online_acronyms});
+	if (online_acronyms)  chrome.storage.local.set({"online_acronyms": online_acronyms});
 
-	chrome.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked});
+	chrome.storage.local.set({"case_sensitive": document.getElementById("case_sensitive_option").checked});
 }
 
 
@@ -73,11 +75,11 @@ function get_default_config() {
  * Set the placeholder of `search_word_in_db` with the correct value of number of words in the DB
  */
 function setNbWordInDB() {
-	chrome.storage.local.get() // get all stored data, key/value
-		.then((res) => {
+	chrome.storage.local.get(null, function(items) {
+		var res = items;//Object.keys(items);
 			DB = [];
-			if (res.custom_acronyms != undefined) DB = DB.concat(JSON.parse(res.custom_acronyms));
-			if (res.online_acronyms != undefined) DB = DB.concat(JSON.parse(res.online_acronyms));
+			if (res["custom_acronyms"] != undefined) DB = DB.concat(JSON.parse(res["custom_acronyms"]));
+			if (res["online_acronyms"] != undefined) DB = DB.concat(JSON.parse(res["online_acronyms"]));
 			document.getElementById("search_word_in_db").placeholder = "Search DB (" + DB.length + " entries)";
 		});
 }
@@ -90,8 +92,9 @@ function setNbWordInDB() {
 function show_definition(result) {
 	console.log(result);
 
-	if (result[0]) result = result[0].result;
-	if (result != '') { // if a word is selected
+	result = result[0];
+	if (result && result != '') { // if a word is selected
+		console.log(result);
 		document.getElementById("main_page").style.display = "none";
 		document.getElementById("word_definition").style.display = "block";
 		
@@ -295,12 +298,13 @@ document.getElementById("search_word_in_db").addEventListener("keypress", functi
 var DB = [];
 var local_config = JSON.parse(get_default_config());
 
-chrome.storage.local.get() // get all stored data, key/value
-	.then((res) => {
+chrome.storage.local.get(null, function(items) {
+    var res = items;
+    console.log(res);
 
 		// load DB from local storage. Load acronyms from local storage.
-		if (res.custom_acronyms != undefined) DB = DB.concat(JSON.parse(res.custom_acronyms));
-		if (res.online_acronyms != undefined) DB = DB.concat(JSON.parse(res.online_acronyms));
+		if (res["custom_acronyms"] != undefined) DB = DB.concat(JSON.parse(res["custom_acronyms"]));
+		if (res["online_acronyms"] != undefined) DB = DB.concat(JSON.parse(res["online_acronyms"]));
 		
 
 		// load local config (url add & mail add) ; from storage, or from default config
@@ -314,7 +318,7 @@ chrome.storage.local.get() // get all stored data, key/value
 		// if (local_config.hasOwnProperty("url_add"))
 		document.getElementById("url_add").href = local_config['url_add'];
 		
-		if (res.custom_acronyms) custom_acronyms = JSON.parse(res.custom_acronyms);
+		if (res["custom_acronyms"]) custom_acronyms = JSON.parse(res["custom_acronyms"]);
 		else custom_acronyms = local_config["custom_entries"];
 		
 		// update our textarea with the config
@@ -327,14 +331,12 @@ chrome.storage.local.get() // get all stored data, key/value
 			console.log("tab.url");
 			console.log(tab.url);
 			if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
-				chrome.scripting.executeScript({
-					target: {
-						tabId: tab.id,
-						},
-						func: () => {
-						return window.getSelection() != '' ? window.getSelection().toString() : false;
-						},
-					}).then((res) => show_definition(res));
+				const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
+
+				chrome.tabs.executeScript(tab.id,{
+					code: getWindowSelection
+				},show_definition);
+				
 			} else {
 				show_definition(false);
 			}
