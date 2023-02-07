@@ -50,25 +50,3 @@ textarea {
 .selected {
 	background-color: #04aa6d;
 }
-
-
-
-
-/* button {
-	border: none;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	transition-duration: 0.4s;
-	cursor: pointer;
-	border: 2px solid #4CAF50;
-
-	background-color: white; 
-	color: black; 
-  }
-  
-button:hover {
-	background-color: #4CAF50; 
-	color: white; 
-  } */

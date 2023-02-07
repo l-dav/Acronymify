@@ -13,19 +13,28 @@ document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getMan
 // Utility functions
 
 
-// save data to local storage
-function save_data(url, local_config, db) {
-	if (url) chrome.storage.local.set({url: url});
-
-	if (local_config) chrome.storage.local.set({local_config: local_config});
+/**
+ * Save params to local storage
+ * @param {string} local_config    JSON string containing `acronyms_source`, `url_add`, `mail_add`
+ * @param {string} custom_acronyms JSON string containing local acronyms
+ * @param {string} online_acronyms JSON string containing acronyms defined from an online source
+ */
+function save_data(local_config, custom_acronyms, online_acronyms) {
+	if (local_config)     chrome.storage.local.set({local_config: local_config});
 	
-	if (db) chrome.storage.local.set({db: db});
+	if (custom_acronyms)  chrome.storage.local.set({custom_acronyms: custom_acronyms});
+
+	if (online_acronyms)  chrome.storage.local.set({online_acronyms: online_acronyms});
 
 	chrome.storage.local.set({case_sensitive: document.getElementById("case_sensitive_option").checked});
 }
 
 
-// append a definition element
+/**
+ * Append a definition element
+ * @param {string} parent_id ID of the node to append definitions
+ * @param {dict} element
+ */
 function appendHTML(parent_id, element) {
 	let html_code = `
 		<p><span>${element.Acronym}</span> : <span>${element.Meaning}</span></p>
@@ -40,7 +49,10 @@ function appendHTML(parent_id, element) {
 }
 
 
-// return default JSON configuration file, as string
+/**
+ * Return default JSON configuration
+ * @returns string 
+ */
 function get_default_config() {
 	return `{
 		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/new_interface/acronyms/computer.json",
@@ -56,12 +68,26 @@ function get_default_config() {
 	}`;
 }
 
+
+/**
+ * Set the placeholder of `search_word_in_db` with the correct value of number of words in the DB
+ */
 function setNbWordInDB() {
-	document.getElementById("search_word_in_db").placeholder = "Search DB (" + DB['entries'].length + " entries)";
+	chrome.storage.local.get() // get all stored data, key/value
+		.then((res) => {
+			DB = [];
+			if (res.custom_acronyms != undefined) DB = DB.concat(JSON.parse(res.custom_acronyms));
+			if (res.online_acronyms != undefined) DB = DB.concat(JSON.parse(res.online_acronyms));
+			document.getElementById("search_word_in_db").placeholder = "Search DB (" + DB.length + " entries)";
+		});
 }
 
 
-function onExecuted(result) {
+/**
+ * Show acronym definition (if `result`)
+ * @param {dict} result 
+ */
+function show_definition(result) {
 	console.log(result);
 
 	if (result[0]) result = result[0].result;
@@ -75,7 +101,7 @@ function onExecuted(result) {
 
 		// loop and show all elements that match the wanted acronym 'result'
 		let found_entry = false;
-		DB['entries'].forEach(element => {
+		DB.forEach(element => {
 			if (case_sensitive) {
 				if (element['Acronym'] === result) {
 					appendHTML("word_definition", element);
@@ -93,13 +119,13 @@ function onExecuted(result) {
 		if (!found_entry) {
 			document.getElementById("word_definition").textContent = "Unknown word: " + result;
 		}
-	} else {
-		// document.getElementById("online_db_loading_result").textContent = DB['entries'].length + " entries loaded.";
-		document.getElementById("search_word_in_db").placeholder = "Search DB (" + DB['entries'].length + " entries)";
 	}
 }
 
 
+/**
+ * Reset addon to zero
+ */
 function reset() {
 	// clear storage
 	chrome.storage.local.clear();
@@ -109,35 +135,26 @@ function reset() {
 }
 
 
-function refresh_local_configuration() {
-	// Show that we are loading ...
-	document.getElementById("online_db_loading_result").textContent = "...";
-
+/**
+ * Save custom words
+ */
+function save_custom_words() {
 	try {
-		local_config = JSON.parse(document.getElementById("local_configuration").value);
-		save_data(false, JSON.stringify(local_config, null, 2), false);
+		save_data(false, JSON.stringify(JSON.parse(document.getElementById("local_configuration").value), null, 2), false);
 
-		fetch(local_config["acronyms_source"])
-			.then(response => 
-				response.json()
-			)
-			.then(response => {
-				document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
+		document.getElementById("online_db_loading_result").textContent = "Saving successful.";
 
-				save_data(false, false, JSON.stringify(response, null, 2));
-
-				document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
-				chrome.runtime.reload();
-			})
-			.catch(_ => {
-				document.getElementById("online_db_loading_result").textContent = "WARNING: saving OK, but online source fetching failed.";
-			});
+		setNbWordInDB();
 	} catch (err) {
+		console.log(err);
 		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
 	}
 }
 
 
+/**
+ * Search a word
+ */
 function search_in_db() {
 	let word = document.getElementById("search_word_in_db").value;
 	document.getElementById("word_definition_search").innerHTML = "";
@@ -146,7 +163,7 @@ function search_in_db() {
 
 	// loop and show all elements that match the wanted acronym 'result'
 	let found_entry = false;
-	DB['entries'].forEach(element => {
+	DB.forEach(element => {
 		if (case_sensitive) {
 			if (element['Acronym'] === word) {
 				appendHTML("word_definition_search", element);
@@ -168,103 +185,56 @@ function search_in_db() {
 }
 
 
+/**
+ * Load option page
+ */
 function load_option_page() {
 	chrome.runtime.openOptionsPage();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// add click listener
+/**
+ * Fetch online source
+ */
+function fetch_url() {
+	// Show that we are loading ...
+	document.getElementById("online_db_loading_result").textContent = "...";
+
+	try {
+		local_config["acronyms_source"] = document.getElementById("online_url").value;
+
+		save_data(JSON.stringify(local_config, null, 2), false, false);
+
+		fetch(local_config["acronyms_source"])
+			.then(response => 
+				response.json()
+			)
+			.then(response => {
+
+				local_config["url_add"] = response["url_add"];
+				local_config["mail_add"] = response["mail_add"];
+
+				save_data(JSON.stringify(local_config, null, 2), false, JSON.stringify(response['entries'], null, 2));
+
+				document.getElementById("online_db_loading_result").textContent = response['entries'].length + " entries fetched.";
+
+				setNbWordInDB();
+			})
+			.catch(err => {
+				console.log(err);
+				document.getElementById("online_db_loading_result").textContent = "WARNING: saving OK, but online source fetching failed.";
+			});
+	} catch (err) {
+		console.log(err);
+		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
+	}
+}
 
 
-// call reset function onclick
-document.getElementById("reset_params").onclick = reset;
-
-// save checkbox value
-document.getElementById("case_sensitive_option").onclick = save_data;
-
-// search in DB
-document.getElementById("search_in_db").onclick = search_in_db
-
-// load option page onclick
-document.getElementById("load_option_page").onclick = load_option_page
-
-document.getElementById("refresh_local_configuration_button").onclick = refresh_local_configuration;
-
-// Execute a function when the user presses a key on the keyboard
-document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
-	// If the user presses the "Enter" key on the keyboard
-	if (event.key === "Enter") search_in_db();
-  }); 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// load storage data
-
-var DB = new Object();
-
-chrome.storage.local.get() // get all stored data, key/value
-	.then((res) => {
-
-		// load DB from local storage. Initialize the variable DB.
-		if (res.db != undefined) DB = JSON.parse(res.db);
-		else DB['entries'] = [];
-
-		// load local config ; from storage or else from default config
-		if (res.local_config != undefined) local_config = JSON.parse(res.local_config);
-		else local_config = JSON.parse(get_default_config());
-		
-		// check the key 'mail_add' (email this mail to make suggestions)
-		if (local_config.hasOwnProperty("mail_add"))
-			document.getElementById("suggestion_acronym").href = "mailto:" + local_config['mail_add'];
-		
-		// check the key 'url_add' (url to the Git repo)
-		if (local_config.hasOwnProperty("url_add"))
-			document.getElementById("url_add").href = local_config['url_add'];
-		
-		// Check for the key 'custom_entries' and concat to the other entries
-		if (local_config.hasOwnProperty("custom_entries"))
-			DB['entries'] = DB['entries'].concat(local_config['custom_entries']);
-		
-		// update our textarea with the config
-		document.getElementById("local_configuration").value = JSON.stringify(local_config, null, 2);
-
-		// if our DB is not empty (if we have entries), we check if a word is selected
-		if (Object.keys(DB).length !== 0) {
-			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				var tab = tabs[0];
-				console.log("tab.url");
-				console.log(tab.url);
-				if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
-					chrome.scripting.executeScript({
-						target: {
-							tabId: tab.id,
-						  },
-						  func: () => {
-							return window.getSelection() != '' ? window.getSelection().toString() : false;
-						  },
-						}).then((res) => onExecuted(res));
-				} else {
-					onExecuted(false);
-				}
-			  });
-		}
-
-		// update the case sensitivity checkbox with the storage
-		if (res.case_sensitive != undefined)
-			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
-});
-
-
-///////////////////////////////////////////////
-
-
-document.getElementById("menu_home").onclick    = function() { changepage("home");   };
-document.getElementById("menu_config").onclick  = function() { changepage("config"); };
-document.getElementById("menu_options").onclick = function() { changepage("options");};
-document.getElementById("menu_about").onclick   = function() { changepage("about");  };
-document.getElementById("menu_help").onclick    = function() { changepage("help");   };
-
+/**
+ * Change to the given page ID
+ * @param {string} id page ID
+ */
 function changepage(id) {
 	var slides = document.getElementsByClassName("part");
 	for (var i = 0; i < slides.length; i++) {
@@ -279,3 +249,100 @@ function changepage(id) {
 	document.getElementById("menu_" + id).classList.add("selected");
 	document.getElementById(id).style.display = "block";
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// add click listener
+
+
+// call reset function onclick
+document.getElementById("reset_params").onclick = reset;
+
+// fetch online source
+document.getElementById("fetch").onclick = fetch_url;
+
+// save checkbox value
+document.getElementById("case_sensitive_option").onclick = save_data;
+
+// search in DB
+document.getElementById("search_in_db").onclick = search_in_db
+
+// load option page onclick
+document.getElementById("load_option_page").onclick = load_option_page
+
+// save custom acronyms
+document.getElementById("refresh_local_configuration_button").onclick = save_custom_words;
+
+// Execute a function when the user presses a key on the keyboard
+document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
+	// If the user presses the "Enter" key on the keyboard
+	if (event.key === "Enter") search_in_db();
+}); 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// load storage data
+
+var DB = [];
+var local_config = JSON.parse(get_default_config());
+
+chrome.storage.local.get() // get all stored data, key/value
+	.then((res) => {
+
+		// load DB from local storage. Load acronyms from local storage.
+		if (res.custom_acronyms != undefined) DB = DB.concat(JSON.parse(res.custom_acronyms));
+		if (res.online_acronyms != undefined) DB = DB.concat(JSON.parse(res.online_acronyms));
+		
+
+		// load local config (url add & mail add) ; from storage, or from default config
+		if (res.local_config != undefined) local_config = JSON.parse(res.local_config);
+		
+		// check the key 'mail_add' (email this mail to make suggestions)
+		// if (local_config.hasOwnProperty("mail_add"))
+		document.getElementById("suggestion_acronym").href = "mailto:" + local_config['mail_add'];
+		
+		// check the key 'url_add' (url to the Git repo)
+		// if (local_config.hasOwnProperty("url_add"))
+		document.getElementById("url_add").href = local_config['url_add'];
+		
+		if (res.custom_acronyms) custom_acronyms = JSON.parse(res.custom_acronyms);
+		else custom_acronyms = local_config["custom_entries"];
+		
+		// update our textarea with the config
+		document.getElementById("online_url").value = local_config["acronyms_source"];
+		document.getElementById("local_configuration").value = JSON.stringify(custom_acronyms, null, 2);
+
+		// if our DB is not empty (if we have entries), we check if a word is selected
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			var tab = tabs[0];
+			console.log("tab.url");
+			console.log(tab.url);
+			if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
+				chrome.scripting.executeScript({
+					target: {
+						tabId: tab.id,
+						},
+						func: () => {
+						return window.getSelection() != '' ? window.getSelection().toString() : false;
+						},
+					}).then((res) => show_definition(res));
+			} else {
+				show_definition(false);
+			}
+		});
+
+		// update the case sensitivity checkbox with the storage
+		if (res.case_sensitive != undefined)
+			document.getElementById("case_sensitive_option").checked = res.case_sensitive;
+		
+		setNbWordInDB();
+});
+
+
+///////////////////////////////////////////////
+
+
+document.getElementById("menu_home").onclick    = function() { changepage("home");   };
+document.getElementById("menu_config").onclick  = function() { changepage("config"); };
+document.getElementById("menu_options").onclick = function() { changepage("options");};
+document.getElementById("menu_about").onclick   = function() { changepage("about");  };
+document.getElementById("menu_help").onclick    = function() { changepage("help");   };
