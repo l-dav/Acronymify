@@ -10,6 +10,7 @@ Acronymify is a browser extension that enables you to define acronyms, recognize
 - Firefox: download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
 - Chrome: download it from [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca).
 - Opera: download it from [Opera addons](https://addons.opera.com/en-gb/extensions/details/acronymify/).
+- Brave: download it from [Brave Web Store](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca) (same as [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca)).
 
 - Firefox Mobile: Acronymify is compatible with Firefox for Android. Follow this [tutorial](https://support.mozilla.org/en-US/kb/extended-add-support) (advanced users).
 
