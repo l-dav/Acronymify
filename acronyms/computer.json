@@ -1,0 +1,41 @@
+{
+    "entries": [
+      {
+        "Acronym": "JS",
+        "Meaning": "JavaScript",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "HTML",
+        "Meaning": "HyperText Markup Language",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "CSS",
+        "Meaning": "Cascading Style Sheets",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "PHP",
+        "Meaning": "Hypertext Preprocessor",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "C++",
+        "Meaning": "C plus plus",
+        "Hint": "An object-oriented programming (OOP) language",
+        "Alternatives": "",
+        "url": ""
+      }
+    ],
+    "url_add" : "https://github.com/l-dav/Acronymify/blob/master/acronyms/computer.json",
+	"mail_add" : "your@mail.com"
+  }

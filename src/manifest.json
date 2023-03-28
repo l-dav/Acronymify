@@ -1,0 +1,69 @@
+{
+	"description": "Acronymify recognizes your acronyms on the web.",
+	"manifest_version": 3,
+	"name": "Acronymify",
+	"version": "1.1.1",
+	"author": "Léon Davidovski",
+	"homepage_url": "https://github.com/l-dav/Acronymify",
+	
+	"icons": {
+		"32": "icons/abc_icon_32.png",
+		"48": "icons/abc_icon_48.png",
+		"64": "icons/abc_icon_64.png",
+		"128": "icons/abc_icon_128.png"
+	},
+
+	"permissions": [
+		"activeTab",
+		"storage",
+		"scripting"
+	],
+
+	"action": {
+		"default_icon": "icons/abc_icon_48.png",
+		"theme_icons": [{
+			"light": "icons/abc_icon_32.png",
+			"dark": "icons/abc_icon_32.png",
+			"size": 32
+			},
+			{
+			"light": "icons/abc_icon_48.png",
+			"dark": "icons/abc_icon_48.png",
+			"size": 48
+			},
+			{
+			"light": "icons/abc_icon_64.png",
+			"dark": "icons/abc_icon_64.png",
+			"size": 64
+			},
+			{
+			"light": "icons/abc_icon_128.png",
+			"dark": "icons/abc_icon_128.png",
+			"size": 128
+			}
+		],
+		"default_title": "Acronymify",
+		"default_popup": "popup/popup.html"
+	},
+	
+	"commands": {
+		"_execute_action": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+F"
+		}
+		}
+	},
+
+	"options_ui": {
+		"page": "option_page/option.html",
+		"open_in_tab": true,
+		"browser_style": true
+	},
+
+	"browser_specific_settings": {
+		"gecko": {
+		  "id": "acronymify@technologyandstrategy.com"
+		}
+	  }
+	  
+}

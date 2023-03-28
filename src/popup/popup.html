@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="popup.css"/>
+	</head>
+
+	<body>
+		<div id="main_page">
+
+
+			<!-- Navigation bar -->
+			<div class="scrollmenu" id="scrollmenu">
+				<a class="menuItem selected" id="menu_home">Home</a>
+				<a class="menuItem" id="menu_options">Options</a>
+				<a class="menuItem" id="menu_config">Config</a>
+				<a class="menuItem" id="menu_help">Help</a>
+				<a class="menuItem" id="menu_about">About</a>
+			</div>
+
+
+			<!-- Show title everywhere everytime  -->
+			<h1>Acronymify</h1>
+
+
+			<!-- "Home" tab -->
+			<div id="home" class="part">
+
+				<br>
+				<input type="text" id="search_word_in_db" placeholder="Search DB" autofocus>
+				<button type="button" id="search_in_db">Search</button>
+				<br>
+				
+				<div id="word_definition_search"></div>
+
+				<br>
+				<div style="text-align: center;">
+					<button type="button" id="load_option_page">Open DB</button>
+				</div>
+			</div>
+
+
+			<!-- "About" tab -->
+			<div id="about" class="part" style="display: none;">
+				<h2 id="version"></h2>
+
+				<p id="author"></p>
+				<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
+
+				<p>
+					<a id="suggestion_acronym" href="mailto:l.davidovski@technologyandstrategy.com">Suggest new acronyms (mail)</a>
+					<a id="url_add" href="http://no_web_site.com" target="_blank" rel="noopener noreferrer">Suggest new acronyms (git)</a>
+				</p>
+
+				<p style="text-align: center;"><button type="button" id="reset_params">Reset extension</button></p>
+			</div>
+			
+
+			<!-- "Options" tab -->
+			<div id="options" class="part" style="display: none;">
+				<p>Options:</p>
+				<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
+				<label for="case_sensitive_option">Case sensitive</label>
+			</div>
+
+
+			<!-- "Help" tab -->
+			<div id="help" class="part" style="display: none;">
+				<p>How to use Acronymify?</p>
+				<p>You must first set up your local database. This database will contain all the terms that Acronymify will recognize.</p>
+				<p>In the config tab: </p>
+				<p>- you can link an online JSON file.</p>
+				<p>- you can enter your own custom words.</p>
+				<p>Once your database is set up, you can use Acronymify on any web page by selecting a word and using the shortcut <span id="keyboard_shortcut"></span> to open its definition, or by clicking on the Acronymify popup.</p>
+				<p>Additionally, you can use the search bar in the home tab to explore your acronyms.</p>
+			</div>
+
+
+			<!-- "Config" tab -->
+			<div id="config" class="part" style="display: none;">
+				<p id="first_time" style="display: none;"><span style="font-weight: bold;">Your local database looks empty &#128566;</span><br>To build your local database: <br> - Fetch your online source URL. <br>- Add your custom entries.</p>
+
+				<p>Your online source:</p>
+
+				<input type="text" id="online_url" placeholder="Your online source" style="width: 350px;">
+				<button type="button" id="fetch">Fetch URL</button>
+
+				<hr>
+
+				<p>Your local acronyms:</p>
+				<textarea id="local_configuration"></textarea>
+
+				<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button></p>
+
+				<p id="online_db_loading_result"></p>
+			</div>
+
+		</div>
+
+		<div id="word_definition"></div>
+
+		<script src="popup.js"></script>
+	</body>
+
+</html>
