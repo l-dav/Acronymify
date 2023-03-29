@@ -1,72 +1,36 @@
 # Acronymify
 
-Acronymify is a browser extension that enables you to define acronyms, recognize them on web pages, and display their definition.
+Acronymify is a web extension that enables you to define acronyms, recognize them on web pages, and display their definition. 
+
+The extension is available for Firefox, Chrome, Edge, and Opera.
 
 ![Logo](images/abc_long.png "Acronymify Logo")
 
 
 ## Installation
 
-- Firefox: download it from [AMO](https://addons.mozilla.org/addon/acronymify/).
-- Chrome: download it from [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca).
-- Edge: download it from [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/iafhomljhcdjpeiihmgmpkccllpjoalh).
-- Opera: download it from [Opera addons](https://addons.opera.com/en-gb/extensions/details/acronymify/).
-- Brave: download it from [Brave Web Store](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca) (same as [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca)).
+You can download Acronymify from the following stores:
 
-- Firefox Mobile: Acronymify is properly working with Firefox for Android. Follow this [tutorial](https://support.mozilla.org/en-US/kb/extended-add-support) (advanced users).
+- Firefox: [AMO](https://addons.mozilla.org/addon/acronymify/).
+- Chrome, Brave, and Kiwi: [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca).
+- Edge: [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/iafhomljhcdjpeiihmgmpkccllpjoalh).
+- Opera: [Opera addons](https://addons.opera.com/en-gb/extensions/details/acronymify/).
 
-- Safari: ~~too expensive~~ not available. But you may create it yourself: download a [release](https://github.com/l-dav/Acronymify/releases/) and follow [this tutorial](https://developer.apple.com/documentation/safariservices/safari_web_extensions/converting_a_web_extension_for_safari).
+
+Acronymify is also properly working with Firefox for Android. You can find a tutorial for advanced users on how to install it [here](https://support.mozilla.org/en-US/kb/extended-add-support).
+
+Safari is ~~too expensive~~ not supported, but you may create your own version by downloading a [release](https://github.com/l-dav/Acronymify/releases/) and following [this tutorial](https://developer.apple.com/documentation/safariservices/safari_web_extensions/converting_a_web_extension_for_safari).
 
 
 ## Usage
 
-![Main page](images/popup_home_long.PNG "Main page")  
+![Main page](images/popup_home_long.PNG "Main page")
 
-When you load Acronymify for the first time, you will be guide to build your local database.
+Acronymify allows you to manage acronyms by defining and storing your own acronyms, or fetching them from an online database. When you load Acronymify for the first time, you will be guided to build your local database.
 
-Then, click on a word on any web page, and activate the extension by using the shortcut or clicking the extension logo. If the word's definition is known, it will be displayed.
+### Defining custom entries
 
-
-### Config tab
-
-Configure your local database from the config tab.
-Several fields are provided:
-- `acronyms_source`: URL to an online source dataset. See "Use an online source".
-- `url_add`: URL to your source repository, if needed.
-- `mail_add`: a contact URL to propose new words, if needed.
-
-- `custom_entries`: define custom local entries. See "Add custom entries".
-
-#### Use an online source
-
-The online database must follow the following JSON format:
-```json
-{
-    "entries": [
-        {
-            "Acronym": "acronym",
-            "Meaning": "meaning",
-            "Hint": "hint",
-            "Alternatives": "alternatives",
-            "url": "url"
-        }, {
-            "Acronym": "acronym",
-            "Meaning": "meaning",
-            "Hint": "hint",
-            "Alternatives": "alternatives",
-            "url": "url"
-        }
-    ]
-}
-```
-
-Specify the URL to the raw JSON data in the field `acronyms_source`.
-
-#### Add custom entries
-
-You can specified your own custom entries.
-
-Your entries must follow the following JSON format:
+To define your own acronyms, click on the "Custom" tab and add your entries to the text area in the following JSON format:
 
 ```json
 [
@@ -75,30 +39,68 @@ Your entries must follow the following JSON format:
         "Meaning": "meanings here",
         "Hint": "an explanation",
         "Alternatives": "alternative words",
-        "url": "an URL"
+        "url": "a URL"
     }, 
     {
         "Acronym": "your second acronym",
         "Meaning": "meanings here",
         "Hint": "an explanation",
         "Alternatives": "alternative words",
-        "url": "an URL"
+        "url": "a URL"
     }
 ]
 ```
 
-Add them to the field `custom_entries`.
+### Fetching from an online source
+
+You can also fetch acronyms from an online database by specifying the URL to the raw JSON data in the input field. The online database must follow the following JSON format:
+
+```json
+{
+    "entries": [
+        {
+            "Acronym": "acronym",
+            "Meaning": "meaning",
+            "Hint": "hint",
+            "Alternatives": "alternatives",
+            "url": "a URL"
+        }, 
+        {
+            "Acronym": "acronym",
+            "Meaning": "meaning",
+            "Hint": "hint",
+            "Alternatives": "alternatives",
+            "url": "a URL"
+        }
+    ],
+    "url_add": "URL to your online source",
+    "mail_add": "an email to contact to add new acronyms"
+}
+```
+
+Since Acronymify version 2.0.0, multiple sources are supported. You can create a file that links to other sources using the following template:
+
+```json
+{
+    "sources": [
+        {"name": "name of a source", "source": "URL"},
+        {"name": "name of a source", "source": "URL"},
+        {"name": "name of a source", "source": "URL"}
+    ],
+    "url_add": "URL to your online source",
+    "mail_add": "an email to contact to add new acronyms"
+}
+```
+
+By using Acronymify and online sources, you can easily manage your acronyms and ensure that everyone on your team has access to the same set of acronyms.
+
 
 ## Documentation
 
-Acronymify is a web extension.
-
-### Overview
-
-The source code is in the folder `./src/`. It contains a file "manifest.json" containing metadata about the extension, as specified in the [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
+Acronymify is a web extension that allows you to manage acronyms in your browser. The source code is available in the folder `./src/`. It contains a file named manifest.json that contains metadata about the extension, as specified in the [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
 
 
-### Build, Sign, Publish
+## Build, Sign, Publish
 
 The Makefile allows you to build, sign, publish the extension (Firefox only for now).
 
@@ -113,7 +115,7 @@ To sign the extension, generate the .xpi archive and list the new version on AMO
 
 ## License
 
-[GPLv3](LICENSE)
+Acronymify is licensed under the GPLv3. You can find the full text of the license in the [LICENSE](LICENSE) file.
 
 ## Authors
 
