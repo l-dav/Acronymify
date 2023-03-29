@@ -1,0 +1,62 @@
+{
+    "entries": [
+      {
+        "Acronym": "TBH",
+        "Meaning": "To be honest",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "ASAP",
+        "Meaning": "As soon as possible",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "BRB",
+        "Meaning": "Be right back",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "DOE",
+        "Meaning": "Depending on experience",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "IAM",
+        "Meaning": "In a meeting",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "LMK",
+        "Meaning": "Let me know",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "TYT",
+        "Meaning": "Let me know",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      },
+      {
+        "Acronym": "EOW",
+        "Meaning": "End of week",
+        "Hint": "",
+        "Alternatives": "",
+        "url": ""
+      }
+    ],
+    "url_add" : "https://github.com/l-dav/Acronymify/blob/master/acronyms/professional.json",
+	"mail_add" : "no_contact_mail_for_now@mail.com"
+}

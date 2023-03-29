@@ -1,0 +1,8 @@
+{
+    "sources": [
+        {"name": "Computer", "source": "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/computer.json"},
+        {"name": "Professional", "source": "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/professional.json"}
+    ],
+    "url_add": "https://github.com/l-dav/Acronymify/pulls",
+    "mail_add": "no_contact_mail_for_now@mail.com"
+}
