@@ -21,16 +21,18 @@ function appendHTML(parent_id, element) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // load storage data
 
-chrome.storage.local.get() // get local storage
-	.then((res) => {
-		// load DB from local storage. Initialize the variable DB.
-		if (res.online_acronyms != undefined) 
-			JSON.parse(res.online_acronyms).forEach(element => {
+chrome.storage.local.get(null, function(res) {
+	if (res.online_acronyms != undefined) {
+		DB = JSON.parse(res["online_acronyms"]);
+		Object.keys(DB).forEach(source => {
+			DB[source]["value"].forEach(element => {
 				appendHTML("word_definition", element);
 			});
+		});
+	}
 
-		if (res.custom_acronyms)
-			JSON.parse(res.custom_acronyms).forEach(element => {
-				appendHTML("word_definition", element);
-			});
-	});
+	if (res.custom_acronyms)
+		JSON.parse(res.custom_acronyms).forEach(element => {
+			appendHTML("word_definition", element);
+		});
+});
