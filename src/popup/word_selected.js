@@ -5,7 +5,7 @@
 function show_definition(result) {
 	console.log(result);
 
-	result = result[0];
+	if (result[0]) result = result[0].result;
 	if (result && result != '') { // if a word is selected
 		console.log(result);
 		

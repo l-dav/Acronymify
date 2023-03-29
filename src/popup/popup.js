@@ -20,7 +20,7 @@ document.getElementById("version").textContent = 'Version ' + chrome.runtime.get
 document.getElementById("author").textContent = 'Author: ' + chrome.runtime.getManifest().author;
 
 // Show keyboard shortcut
-document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
+document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_action.suggested_key.default;
 
 /**
  * Return default JSON configuration
@@ -156,16 +156,36 @@ chrome.storage.local.get(null, function(items) {
 		var tab = tabs[0];
 		console.log(`Current tab: ${tab.url}`);
 		if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
-			const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
-
-			chrome.tabs.executeScript(tab.id,{
-				code: getWindowSelection
-			},show_definition);
-			
+			chrome.scripting.executeScript({
+				target: {
+					tabId: tab.id,
+					},
+					func: () => {
+					return window.getSelection() != '' ? window.getSelection().toString() : false;
+					},
+				}).then((res) => show_definition(res));
 		} else {
 			show_definition(false);
 		}
 	});
+	// if our DB is not empty (if we have entries), we check if a word is selected
+	// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	// 	var tab = tabs[0];
+	// 	console.log("tab.url");
+	// 	console.log(tab.url);
+	// 	if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
+	// 		chrome.scripting.executeScript({
+	// 			target: {
+	// 				tabId: tab.id,
+	// 				},
+	// 				func: () => {
+	// 				return window.getSelection() != '' ? window.getSelection().toString() : false;
+	// 				},
+	// 			}).then((res) => show_definition(res));
+	// 	} else {
+	// 		show_definition(false);
+	// 	}
+	// });
 
 	// update the case sensitivity checkbox with the storage
 	console.log(`Option case sensitive: ${items.case_sensitive}`);
