@@ -4,21 +4,61 @@
  * Append a definition element
  * @param {string} parent_id ID of the node to append definitions
  * @param {dict} element dict containing acronym attributes
+ * @param {bool} prepend boolean to insert element either at the beginning or at the end of 'element'
  */
 function appendHTML(parent_id, element, prepend = false) {
-	if(!element.Meaning && !element.Hint && !element.Alternatives &&! element.url) {
-		return;
-	}
-	
-	let html_code = `<p><span>${element.Acronym}</span> : <span>${element.Meaning}</span></p>`;
-	if (element.Hint) html_code += `<p style="padding-left:30px">${element.Hint}</p>`
-	if (element.Alternatives) html_code += `<p style="padding-left:30px">${element.Alternatives}</p>`
-	if (element.url) html_code += `<p style="padding-left:30px">${element.url}</p>`
+    if(!element.Meaning && !element.Hint && !element.Alternatives && !element.url) {
+        return;
+    }
 
-	const div = document.createElement("div");
-	div.innerHTML = html_code;
-	parent = document.getElementById(parent_id);
-	prepend ? parent.prepend(div) : parent.appendChild(div);
+	// Remove HTML tags
+	if (element.Acronym) element.Acronym = element.Acronym.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi, '');
+	if (element.Meaning) element.Meaning = element.Meaning.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi, '');
+	if (element.Hint) element.Hint = element.Hint.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi, '');
+	if (element.Alternatives) element.Alternatives = element.Alternatives.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi, '');
+	if (element.url) element.url = element.url.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi, '');
+
+    const parent = document.getElementById(parent_id);
+    const div = document.createElement("div");
+    const spanAcronym = document.createElement("span");
+    const spanMeaning = document.createElement("span");
+    const pHint = document.createElement("p");
+    const pAlternatives = document.createElement("p");
+    const pUrl = document.createElement("p");
+
+    spanAcronym.innerText = element.Acronym;
+    spanMeaning.innerText = element.Meaning;
+    pHint.innerText = element.Hint;
+    pAlternatives.innerText = element.Alternatives;
+    pUrl.innerText = element.url;
+
+	spanAcronym.style.fontWeight = "bold";
+	div.style.paddingTop = "10px";
+
+    div.appendChild(spanAcronym);
+    div.appendChild(document.createTextNode(" : "));
+    div.appendChild(spanMeaning);
+
+    if (element.Hint) {
+        pHint.style.paddingLeft = "30px";
+        div.appendChild(pHint);
+    }
+
+    if (element.Alternatives) {
+        pAlternatives.style.paddingLeft = "30px";
+        div.appendChild(pAlternatives);
+    }
+
+    if (element.url) {
+        pUrl.style.paddingLeft = "30px";
+        div.appendChild(pUrl);
+    }
+
+    if (prepend) {
+        parent.insertBefore(div, parent.firstChild);
+    } else {
+        parent.appendChild(div);
+    }
 }
 
 function appendHTMLTableChild(sourceTitle, sourceLength, sourceActive) {
