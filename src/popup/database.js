@@ -4,19 +4,32 @@
 /**
  * Set the placeholder of `search_word_in_db` with the correct value of number of words in the DB
  */
+// function update_home_placeholder_nb_entries() {
+// 	document.getElementById("search_word_in_db").placeholder = "Search DB (" + get_database_length() + " entries)";
+// }
 function update_home_placeholder_nb_entries() {
-	document.getElementById("search_word_in_db").placeholder = "Search DB (" + get_database_length() + " entries)";
+	const databaseLength = get_database_length();
+	document.getElementById("search_word_in_db").placeholder = `Search DB (${databaseLength} entries)`;
 }
 
 
-function get_database_length(include_only_selected = true) {
-	total = 0;
+// function get_database_length(include_only_selected = true) {
+// 	total = 0;
+// 	Object.keys(DB).forEach(source => {
+// 		if ((include_only_selected && DB[source]["active"]) || !(include_only_selected))
+// 			total += DB[source]["value"].length;
+// 	});
+// 	return total;
+// }
+function get_database_length(includeOnlySelected = true) {
+	let total = 0;
 	Object.keys(DB).forEach(source => {
-		if ((include_only_selected && DB[source]["active"]) || !(include_only_selected))
-			total += DB[source]["value"].length;
+	  if ((includeOnlySelected && DB[source]["active"]) || !(includeOnlySelected)) {
+		total += DB[source]["value"].length;
+	  }
 	});
 	return total;
-}
+  }
 
 
 /**

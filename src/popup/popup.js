@@ -13,25 +13,21 @@ Website: https://github.com/l-dav/Acronymify
 
 console.log("Starting Acronymify popup");
 
-if (navigator.userAgent.indexOf("Firefox") !== -1) {
-	console.log("We are on Firefox");
-	on_firefox = true;
-} else {
-	console.log("We are NOT on Firefox");
-	on_firefox = false;
-}
+const on_firefox = navigator.userAgent.indexOf("Firefox") !== -1;
+console.log(on_firefox ? "On Firefox" : "NOT on Firefox");
 
 // Show version
-document.getElementById("version").textContent = 'Version ' + chrome.runtime.getManifest().version;
+const versionEl = document.getElementById("version");
+versionEl.textContent = `Version ${chrome.runtime.getManifest().version}`;
 
 // Show author
-document.getElementById("author").textContent = 'Author: ' + chrome.runtime.getManifest().author;
+const authorEl = document.getElementById("author");
+authorEl.textContent = `Author: ${chrome.runtime.getManifest().author}`;
 
 // Show keyboard shortcut
-if (on_firefox)
-	document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
-else
-	document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_action.suggested_key.default;
+const keyboardShortcutEl = document.getElementById("keyboard_shortcut");
+const commandKey = on_firefox ? "_execute_browser_action" : "_execute_action";
+keyboardShortcutEl.textContent = chrome.runtime.getManifest().commands[commandKey].suggested_key.default;
 
 /**
  * Return default JSON configuration
@@ -67,37 +63,60 @@ function load_option_page() {
 
 
 // call reset function onclick
-document.getElementById("reset_params").onclick = reset_callback;
+// document.getElementById("reset_params").onclick = reset_callback;
+document.getElementById("reset_params").addEventListener("click", reset_callback);
 
 // fetch online source
-document.getElementById("fetch").onclick = fetch_callback;
+// document.getElementById("fetch").onclick = fetch_callback;
+document.getElementById("fetch").addEventListener("click", fetch_callback);
 
 // save checkbox value
-document.getElementById("case_sensitive_option").onclick = function() {
+// document.getElementById("case_sensitive_option").onclick = function() {
+// 	save("case_sensitive", document.getElementById("case_sensitive_option").checked);
+// };
+document.getElementById("case_sensitive_option").addEventListener("click", () => {
 	save("case_sensitive", document.getElementById("case_sensitive_option").checked);
-};
+});
 
 // save autocomplete checkbox value
-document.getElementById("auto_completion_option").onclick = function() {
+// document.getElementById("auto_completion_option").onclick = function() {
+// 	save("auto_complete", document.getElementById("auto_completion_option").checked);
+// };
+document.getElementById("auto_completion_option").addEventListener("click", () => {
 	save("auto_complete", document.getElementById("auto_completion_option").checked);
-};
+});
+
+document.getElementById("search_in_db").addEventListener("click", search_in_db);
+document.getElementById("load_option_page").addEventListener("click", load_option_page);
+document.getElementById("refresh_local_configuration_button").addEventListener("click", save_custom_words);
+
 
 // search in DB
-document.getElementById("search_in_db").onclick                       = search_in_db
+// document.getElementById("search_in_db").onclick                       = search_in_db
 
 // load option page onclick
-document.getElementById("load_option_page").onclick                   = load_option_page
+// document.getElementById("load_option_page").onclick                   = load_option_page
 
 // save custom acronyms
-document.getElementById("refresh_local_configuration_button").onclick = save_custom_words;
+// document.getElementById("refresh_local_configuration_button").onclick = save_custom_words;
 
 // Execute a function when the user presses a key on the keyboard
+// document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
+// 	// If the user presses the "Enter" key on the keyboard
+// 	if (event.key === "Enter") search_in_db();
+// });
+
+// // Execute a function when the user presses a key on the keyboard
+// document.getElementById("online_url").addEventListener("keypress", function(event) {
+// 	// If the user presses the "Enter" key on the keyboard
+// 	if (event.key === "Enter") fetch_callback();
+// });
+
 document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
 	// If the user presses the "Enter" key on the keyboard
 	if (event.key === "Enter") search_in_db();
 });
 
-// Execute a function when the user presses a key on the keyboard
 document.getElementById("online_url").addEventListener("keypress", function(event) {
 	// If the user presses the "Enter" key on the keyboard
 	if (event.key === "Enter") fetch_callback();
@@ -126,12 +145,12 @@ function changepage(id) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add click listeners
 
-document.getElementById("menu_home").onclick                          = function() { changepage("home");   };
-document.getElementById("menu_online").onclick                        = function() { changepage("online"); };
-document.getElementById("menu_custom").onclick                        = function() { changepage("custom"); };
-document.getElementById("menu_options").onclick                       = function() { changepage("options");};
-document.getElementById("menu_about").onclick                         = function() { changepage("about");  };
-document.getElementById("menu_help").onclick                          = function() { changepage("help");   };
+document.getElementById("menu_home").addEventListener("click", () => changepage("home"));
+document.getElementById("menu_online").addEventListener("click", () => changepage("online"));
+document.getElementById("menu_custom").addEventListener("click", () => changepage("custom"));
+document.getElementById("menu_options").addEventListener("click", () => changepage("options"));
+document.getElementById("menu_about").addEventListener("click", () => changepage("about"));
+document.getElementById("menu_help").addEventListener("click", () => changepage("help"));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // load storage data
@@ -147,7 +166,6 @@ chrome.storage.local.get(null, function(items) {
 		console.log("setting online sources");
 		DB = JSON.parse(items["online_acronyms"]);
 		Object.keys(DB).forEach(source => {
-			// update_table(source, DB[source]["value"].length);
 			appendHTMLTableChild(source, DB[source]["value"].length, DB[source]["active"]);
 		});
 	}
@@ -155,16 +173,13 @@ chrome.storage.local.get(null, function(items) {
 	// Load custom acronyms
 	if (items.hasOwnProperty("custom_acronyms")) {
 		custom_acronyms = JSON.parse(items["custom_acronyms"]);
-		// DB = DB.concat(custom_acronyms);
 		DB["custom"] = {"value": custom_acronyms, "active": true};
 		document.getElementById("local_configuration").value = JSON.stringify(custom_acronyms, null, 2);
-	} else {
-		custom_acronyms = false;
 	}
 
 	// load local config (url add & mail add) ; from storage, or from default config
 	if (items.local_config != undefined) local_config = JSON.parse(items.local_config);
-	
+
 	update_params();
 
 	// if our DB is not empty (if we have entries), we check if a word is selected
@@ -177,20 +192,17 @@ chrome.storage.local.get(null, function(items) {
 			if (on_firefox) {
 				const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
 				
-				chrome.tabs.executeScript(tab.id,{
-					code: getWindowSelection
-				},show_definition);
+				chrome.tabs.executeScript(tab.id,{code: getWindowSelection},show_definition);
 			} else {
-				chrome.scripting.executeScript({
-					target: {
-						tabId: tab.id,
-						},
-						func: () => {
-						return window.getSelection() != '' ? window.getSelection().toString() : false;
-						},
-					}).then((res) => show_definition(res));
+				chrome.scripting
+					.executeScript({
+						target: {
+							tabId: tab.id,
+							},
+						func: () => window.getSelection() != '' ? window.getSelection().toString() : false,
+					})
+					.then((res) => show_definition(res));
 			}
-			
 		} else {
 			show_definition(false);
 		}

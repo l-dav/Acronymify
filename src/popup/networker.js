@@ -1,94 +1,76 @@
-
-
-function fetch_an_url(name, url) {
+async function fetchUrl(name, url) {
 	console.log(url);
+  
 	try {
-		fetch(url)
-			.then(response => 
-				response.json()
-			)
-			.then(response => {
-
-				if (DB.hasOwnProperty(name)) {
-					DB[name] = {"value": response['entries'], "active": DB[name]["active"]};
-				} else {
-					DB[name] = {"value": response['entries'], "active": true};
-				}
-
-				save_db();
-
-				update_table(name, response['entries'].length);
-
-				document.getElementById("online_db_loading_result").textContent = get_database_length().toString() + " entries fetched.";
-
-				update_home_placeholder_nb_entries();
-
-				update_params();
-			})
-			.catch(err => {
-				console.log(err);
-				document.getElementById("online_db_loading_result").textContent = "ERROR: online source fetching failed (check URL or CORS policy).";
-			});
+	  const response = await fetch(url);
+	  const data = await response.json();
+  
+	  if (DB.hasOwnProperty(name)) {
+		DB[name] = { value: data.entries, active: DB[name]["active"] };
+	  } else {
+		DB[name] = { value: data.entries, active: true };
+	  }
+  
+	  save_db();
+  
+	  update_table(name, data.entries.length);
+  
+	  document.getElementById("online_db_loading_result").textContent = `${get_database_length()} entries fetched.`;
+  
+	  update_home_placeholder_nb_entries();
+  
+	  update_params();
 	} catch (err) {
-		console.log(err);
-		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
+	  console.log(err);
+	  if (err.name === "SyntaxError") {
+		document.getElementById("online_db_loading_result").textContent =
+		  "ERROR: Error in JSON format. Please put a valid JSON format.";
+	  } else {
+		document.getElementById("online_db_loading_result").textContent =
+		  "ERROR: online source fetching failed (check URL or CORS policy).";
+	  }
 	}
-}
-
-
-/**
- * Fetch online source
- */
-function fetch_callback() {
-	// Show that we are loading ...
+  }
+  
+  async function fetch_callback() {
+	const onlineUrl = document.getElementById("online_url").value;
 	document.getElementById("online_db_loading_result").textContent = "...";
-
+  
 	try {
-		local_config["acronyms_source"] = document.getElementById("online_url").value;
-
-		save("local_config", JSON.stringify(local_config));
-
-		fetch(local_config["acronyms_source"])
-			.then(response => 
-				response.json()
-			)
-			.then(response => {
-
-				console.log(response);
-
-				if (response.hasOwnProperty('entries')) {
-					// old format => convert to new one and invent a title
-
-					response["sources"] = [{"name": local_config["acronyms_source"].split('/').pop(), "source": local_config["acronyms_source"]}];
-					console.log(response);
-				}
-
-				response["sources"].forEach(url => {
-					console.log(url);
-					console.log(url["name"]);
-					console.log(url["source"]);
-					fetch_an_url(url["name"], url["source"]);
-				});
-
-				
-				if (response["url_add"]) {
-					local_config["url_add"] = response["url_add"];
-				}
-				if (response["mail_add"]) {
-					local_config["mail_add"] = response["mail_add"];
-				}
-
-				console.log(local_config);
-
-				save("local_config", JSON.stringify(local_config));
-				update_params();
-			})
-			.catch(err => {
-				console.log(err);
-				document.getElementById("online_db_loading_result").textContent = "ERROR: online source fetching failed (check URL or CORS policy).";
-			});
+	  local_config["acronyms_source"] = onlineUrl;
+	  save("local_config", JSON.stringify(local_config));
+  
+	  const response = await fetch(onlineUrl);
+	  const data = await response.json();
+  
+	  if (data.hasOwnProperty("entries")) {
+		data["sources"] = [
+		  { name: onlineUrl.split("/").pop(), source: onlineUrl },
+		];
+	  }
+  
+	  for (const source of data.sources) {
+		await fetchUrl(source.name, source.source);
+	  }
+  
+	  if (data.url_add) {
+		local_config.url_add = data.url_add;
+	  }
+  
+	  if (data.mail_add) {
+		local_config.mail_add = data.mail_add;
+	  }
+  
+	  save("local_config", JSON.stringify(local_config));
+	  update_params();
 	} catch (err) {
-		console.log(err);
-		document.getElementById("online_db_loading_result").textContent = "ERROR: Error in JSON format. Please put a valid JSON format.";
+	  console.log(err);
+	  if (err.name === "SyntaxError") {
+		document.getElementById("online_db_loading_result").textContent =
+		  "ERROR: Error in JSON format. Please put a valid JSON format.";
+	  } else {
+		document.getElementById("online_db_loading_result").textContent =
+		  "ERROR: online source fetching failed (check URL or CORS policy).";
+	  }
 	}
-}
+  }

@@ -95,6 +95,13 @@ Since Acronymify version 2.0.0, multiple sources are supported. You can create a
 By using Acronymify and online sources, you can easily manage your acronyms and ensure that everyone on your team has access to the same set of acronyms.
 
 
+### Options
+
+In the "Options" tab, you can currently configure two options:
+- "Case sensitive": check this option if you want your searches to be case sensitive.
+- "Auto complete": check this option if you want to see all acronyms that start with your search term.
+
+
 ## Documentation
 
 Acronymify is a web extension that allows you to manage acronyms in your browser. The source code is available in the folder `./src/`. It contains a file named manifest.json that contains metadata about the extension, as specified in the [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
