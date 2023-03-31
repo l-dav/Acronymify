@@ -1,127 +1,131 @@
 <!DOCTYPE html>
 
 <html>
-	<head>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="popup.css"/>
-	</head>
 
-	<body>
-		<div id="main_page" style="display: none;">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+	<div id="main_page" style="display: none;">
 
 
-			<!-- Navigation bar -->
-			<div class="scrollmenu" id="scrollmenu">
-				<a class="menuItem selected" id="menu_home">Home</a>
-				<a class="menuItem" id="menu_options">Options</a>
-				<a class="menuItem" id="menu_online">Online</a>
-				<a class="menuItem" id="menu_custom">Custom</a>
-				<a class="menuItem" id="menu_help">Help</a>
-				<a class="menuItem" id="menu_about">About</a>
+		<!-- Navigation bar -->
+		<div class="scrollmenu" id="scrollmenu">
+			<a class="menuItem selected" id="menu_home">Home</a>
+			<a class="menuItem" id="menu_options">Options</a>
+			<a class="menuItem" id="menu_online">Online</a>
+			<a class="menuItem" id="menu_custom">Custom</a>
+			<a class="menuItem" id="menu_help">Help</a>
+			<a class="menuItem" id="menu_about">About</a>
+		</div>
+
+
+		<!-- Show title everywhere everytime  -->
+		<h1>Acronymify</h1>
+
+
+		<!-- "Home" tab -->
+		<div id="home" class="part">
+			<p id="first_time" style="display: none;"><span style="font-weight: bold;">Your local database looks empty
+					&#128566;</span><br>To build your local database: <br> - Fetch an online source URL from the
+				"Online" tab. <br>- Add your custom entries from the "Custom" tab.</p>
+
+			<br>
+			<input size="30" type="text" id="search_word_in_db" placeholder="Search DB" autofocus>
+			<button type="button" id="search_in_db">Search</button>
+			<br>
+
+			<div id="word_definition_search"></div>
+
+			<br>
+			<div style="text-align: center;">
+				<button type="button" id="load_option_page">Open DB</button>
 			</div>
+		</div>
 
 
-			<!-- Show title everywhere everytime  -->
-			<h1>Acronymify</h1>
+		<!-- "About" tab -->
+		<div id="about" class="part" style="display: none;">
+			<h2 id="version"></h2>
+
+			<p id="author"></p>
+			<p>Contact : <a
+					href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
+
+			<p>
+				<a id="suggestion_acronym" href="mailto:l.davidovski@technologyandstrategy.com">Suggest new acronyms
+					(mail)</a>
+				<a id="url_add" href="https://github.com/l-dav/Acronymify/pulls" target="_blank"
+					rel="noopener noreferrer">Suggest new acronyms (git)</a>
+			</p>
+
+			<p style="text-align: center;"><button type="button" id="reset_params">Reset extension</button></p>
+		</div>
 
 
-			<!-- "Home" tab -->
-			<div id="home" class="part">
-				<p id="first_time" style="display: none;"><span style="font-weight: bold;">Your local database looks empty &#128566;</span><br>To build your local database: <br> - Fetch an online source URL from the "Online" tab. <br>- Add your custom entries from the "Custom" tab.</p>
+		<!-- "Options" tab -->
+		<div id="options" class="part" style="display: none;">
+			<p>Options:</p>
+			<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
+			<label for="case_sensitive_option">Case sensitive</label>
 
-				<br>
-				<input size="30" type="text" id="search_word_in_db" placeholder="Search DB" autofocus>
-				<button type="button" id="search_in_db">Search</button>
-				<br>
-				
-				<div id="word_definition_search"></div>
+			<br>
+			<br>
 
-				<br>
-				<div style="text-align: center;">
-					<button type="button" id="load_option_page">Open DB</button>
-				</div>
-			</div>
+			<input type="checkbox" id="auto_completion_option" name="auto_completion" checked>
+			<label for="auto_completion_option">Autocomplete</label>
+		</div>
 
 
-			<!-- "About" tab -->
-			<div id="about" class="part" style="display: none;">
-				<h2 id="version"></h2>
-
-				<p id="author"></p>
-				<p>Contact : <a href="mailto:l.davidovski@technologyandstrategy.com">l.davidovski@technologyandstrategy.com</a></p>
-
-				<p>
-					<a id="suggestion_acronym" href="mailto:l.davidovski@technologyandstrategy.com">Suggest new acronyms (mail)</a>
-					<a id="url_add" href="https://github.com/l-dav/Acronymify/pulls" target="_blank" rel="noopener noreferrer">Suggest new acronyms (git)</a>
-				</p>
-
-				<p style="text-align: center;"><button type="button" id="reset_params">Reset extension</button></p>
-			</div>
-			
-
-			<!-- "Options" tab -->
-			<div id="options" class="part" style="display: none;">
-				<p>Options:</p>
-				<input type="checkbox" id="case_sensitive_option" name="case_sensitive">
-				<label for="case_sensitive_option">Case sensitive</label>
-
-				<br>
-				<br>
-
-				<input type="checkbox" id="auto_completion_option" name="auto_completion" checked>
-				<label for="auto_completion_option">Autocomplete</label>
-			</div>
+		<!-- "Help" tab -->
+		<div id="help" class="part" style="display: none;">
+			<p>How to use Acronymify?</p>
+			<p>Start by defining your acronyms! You can either define your custom acronyms (tab "Local"), or getting
+				online sources (tab "Online").</p>
+			<p>Once your database is set up, you can use Acronymify on any web page by selecting a word and using the
+				shortcut <span id="keyboard_shortcut"></span> to open its definition, or by clicking on the Acronymify
+				popup.</p>
+			<p>Additionally, you can use the search bar in the home tab to explore your acronyms.</p>
+			<p>Find more informations on the <a href="https://github.com/l-dav/Acronymify" target="_blank">extension web
+					page</a></p>
+		</div>
 
 
-			<!-- "Help" tab -->
-			<div id="help" class="part" style="display: none;">
-				<p>How to use Acronymify?</p>
-				<p>Start by defining your acronyms! You can either define your custom acronyms (tab "Local"), or getting online sources (tab "Online").</p>
-				<p>Once your database is set up, you can use Acronymify on any web page by selecting a word and using the shortcut <span id="keyboard_shortcut"></span> to open its definition, or by clicking on the Acronymify popup.</p>
-				<p>Additionally, you can use the search bar in the home tab to explore your acronyms.</p>
-				<p>Find more informations on the <a href="https://github.com/l-dav/Acronymify">extension web page</a></p>
-			</div>
+		<!-- "Config" tab -->
+		<div id="online" class="part" style="display: none;">
+			<p>Add source:</p>
 
+			<input type="text" id="online_url" placeholder="Source URL" style="width: 350px;">
+			<button type="button" id="fetch">Fetch URL</button>
 
-			<!-- "Config" tab -->
-			<div id="online" class="part" style="display: none;">
-				<p>Add source:</p>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Source</th>
+						<th>Nb acronyms</th>
+					</tr>
+				</thead>
+				<tbody id="source_table_body"></tbody>
+			</table>
 
-				<input type="text" id="online_url" placeholder="Source URL" style="width: 350px;">
-				<button type="button" id="fetch">Fetch URL</button>
+			<p id="online_db_loading_result"></p>
+		</div>
 
-				<table>
-					<thead>
-						<tr>
-							<th></th>
-							<th>Source</th>
-							<th>Nb acronyms</th>
-					  	</tr>
-					</thead>
-					<tbody id="source_table_body"></tbody>
-				</table>
+		<!-- "Custom" tab -->
+		<div id="custom" class="part" style="display: none;">
+			<p>Your local acronyms:</p>
+			<textarea id="local_configuration"></textarea>
 
-				<p id="online_db_loading_result"></p>
+			<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button>
+			</p>
 
-				<!-- <p>Your local acronyms:</p>
-				<textarea id="local_configuration"></textarea>
+			<p id="custom_db_loading_result"></p>
 
-				<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button></p>
-
-				<p id="online_db_loading_result"></p> -->
-			</div>
-
-			<!-- "Custom" tab -->
-			<div id="custom" class="part" style="display: none;">
-				<p>Your local acronyms:</p>
-				<textarea id="local_configuration"></textarea>
-
-				<p style="text-align: center;"><button type="button" id="refresh_local_configuration_button">Update</button></p>
-
-				<p id="custom_db_loading_result"></p>
-				
-				<p>Template to follow:</p>
-				<pre class="template">[
+			<p>Template to follow:</p>
+			<pre class="template">[
   {
     "Acronym": "your_acronym",
     "Meaning": "your_full_meaning",
@@ -133,20 +137,20 @@
     ...
   }
 ]</pre>
-			</div>
-
 		</div>
 
-		<div id="word_definition"></div>
+	</div>
 
-		<br>
+	<div id="word_definition"></div>
 
-		<script src="storage.js"></script>
-		<script src="networker.js"></script>
-		<script src="database.js"></script>
-		<script src="dom_updates.js"></script>
-		<script src="word_selected.js"></script>
-		<script src="popup.js"></script>
-	</body>
+	<br>
+
+	<script src="storage.js"></script>
+	<script src="networker.js"></script>
+	<script src="database.js"></script>
+	<script src="dom_updates.js"></script>
+	<script src="word_selected.js"></script>
+	<script src="popup.js"></script>
+</body>
 
 </html>

@@ -4,32 +4,21 @@
 /**
  * Set the placeholder of `search_word_in_db` with the correct value of number of words in the DB
  */
-// function update_home_placeholder_nb_entries() {
-// 	document.getElementById("search_word_in_db").placeholder = "Search DB (" + get_database_length() + " entries)";
-// }
 function update_home_placeholder_nb_entries() {
 	const databaseLength = get_database_length();
 	document.getElementById("search_word_in_db").placeholder = `Search DB (${databaseLength} entries)`;
 }
 
 
-// function get_database_length(include_only_selected = true) {
-// 	total = 0;
-// 	Object.keys(DB).forEach(source => {
-// 		if ((include_only_selected && DB[source]["active"]) || !(include_only_selected))
-// 			total += DB[source]["value"].length;
-// 	});
-// 	return total;
-// }
 function get_database_length(includeOnlySelected = true) {
 	let total = 0;
 	Object.keys(DB).forEach(source => {
-	  if ((includeOnlySelected && DB[source]["active"]) || !(includeOnlySelected)) {
-		total += DB[source]["value"].length;
-	  }
+		if ((includeOnlySelected && DB[source]["active"]) || !(includeOnlySelected)) {
+			total += DB[source]["value"].length;
+		}
 	});
 	return total;
-  }
+}
 
 
 /**
@@ -37,7 +26,7 @@ function get_database_length(includeOnlySelected = true) {
  */
 function search_in_db() {
 	let word = document.getElementById("search_word_in_db").value;
-	document.getElementById("word_definition_search").innerHTML = "";
+	document.getElementById("word_definition_search").textContent = "";
 
 	word = word.trim();
 
@@ -51,7 +40,7 @@ function search_in_db() {
 			DB[source]["value"].forEach(element => {
 				if (case_sensitive && autocomplete) {
 					if (element['Acronym'] === word) {
-						appendHTML("word_definition_search", element, prepend=true);
+						appendHTML("word_definition_search", element, prepend = true);
 						found_entry = true;
 					}
 					else if (element['Acronym'].startsWith(word)) {
@@ -60,7 +49,7 @@ function search_in_db() {
 					}
 				} else if (!case_sensitive && autocomplete) {
 					if (element['Acronym'].toUpperCase() === word.toUpperCase()) {
-						appendHTML("word_definition_search", element, prepend=true);
+						appendHTML("word_definition_search", element, prepend = true);
 						found_entry = true;
 					}
 					else if (element['Acronym'].toUpperCase().startsWith(word.toUpperCase())) {

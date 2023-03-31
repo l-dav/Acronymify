@@ -1,12 +1,12 @@
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                               _  __       
-     /\                                       (_)/ _|      
-    /  \   ___ _ __ ___  _ __  _   _ _ __ ___  _| |_ _   _ 
+											   _  __       
+	 /\                                       (_)/ _|      
+	/  \   ___ _ __ ___  _ __  _   _ _ __ ___  _| |_ _   _ 
    / /\ \ / __| '__/ _ \| '_ \| | | | '_ ` _ \| |  _| | | |
   / ____ \ (__| | | (_) | | | | |_| | | | | | | | | | |_| |
  /_/    \_\___|_|  \___/|_| |_|\__, |_| |_| |_|_|_|  \__, |
-                                __/ |                 __/ |
-                               |___/                 |___/ 
+								__/ |                 __/ |
+							   |___/                 |___/ 
 
 Website: https://github.com/l-dav/Acronymify
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ keyboardShortcutEl.textContent = chrome.runtime.getManifest().commands[commandKe
  */
 function get_default_config() {
 	return `{
-		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/computer.json",
+		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/configuration.json",
 		"url_add" : "https://github.com/l-dav/Acronymify/pulls",
 		"mail_add" : "l.davidovski@technologyandstrategy.com"
 	}`;
@@ -63,61 +63,38 @@ function load_option_page() {
 
 
 // call reset function onclick
-// document.getElementById("reset_params").onclick = reset_callback;
 document.getElementById("reset_params").addEventListener("click", reset_callback);
 
 // fetch online source
-// document.getElementById("fetch").onclick = fetch_callback;
 document.getElementById("fetch").addEventListener("click", fetch_callback);
 
 // save checkbox value
-// document.getElementById("case_sensitive_option").onclick = function() {
-// 	save("case_sensitive", document.getElementById("case_sensitive_option").checked);
-// };
 document.getElementById("case_sensitive_option").addEventListener("click", () => {
 	save("case_sensitive", document.getElementById("case_sensitive_option").checked);
 });
 
 // save autocomplete checkbox value
-// document.getElementById("auto_completion_option").onclick = function() {
-// 	save("auto_complete", document.getElementById("auto_completion_option").checked);
-// };
 document.getElementById("auto_completion_option").addEventListener("click", () => {
 	save("auto_complete", document.getElementById("auto_completion_option").checked);
 });
 
-document.getElementById("search_in_db").addEventListener("click", search_in_db);
-document.getElementById("load_option_page").addEventListener("click", load_option_page);
-document.getElementById("refresh_local_configuration_button").addEventListener("click", save_custom_words);
-
-
 // search in DB
-// document.getElementById("search_in_db").onclick                       = search_in_db
+document.getElementById("search_in_db").addEventListener("click", search_in_db);
 
 // load option page onclick
-// document.getElementById("load_option_page").onclick                   = load_option_page
+document.getElementById("load_option_page").addEventListener("click", load_option_page);
 
 // save custom acronyms
-// document.getElementById("refresh_local_configuration_button").onclick = save_custom_words;
+document.getElementById("refresh_local_configuration_button").addEventListener("click", save_custom_words);
 
 // Execute a function when the user presses a key on the keyboard
-// document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
-// 	// If the user presses the "Enter" key on the keyboard
-// 	if (event.key === "Enter") search_in_db();
-// });
-
-// // Execute a function when the user presses a key on the keyboard
-// document.getElementById("online_url").addEventListener("keypress", function(event) {
-// 	// If the user presses the "Enter" key on the keyboard
-// 	if (event.key === "Enter") fetch_callback();
-// });
-
-document.getElementById("search_word_in_db").addEventListener("keypress", function(event) {
+document.getElementById("search_word_in_db").addEventListener("keypress", function (event) {
 	// If the user presses the "Enter" key on the keyboard
 	if (event.key === "Enter") search_in_db();
 });
 
-document.getElementById("online_url").addEventListener("keypress", function(event) {
+// // Execute a function when the user presses a key on the keyboard
+document.getElementById("online_url").addEventListener("keypress", function (event) {
 	// If the user presses the "Enter" key on the keyboard
 	if (event.key === "Enter") fetch_callback();
 });
@@ -155,11 +132,11 @@ document.getElementById("menu_help").addEventListener("click", () => changepage(
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // load storage data
 
-chrome.storage.local.get(null, function(items) {
+chrome.storage.local.get(null, function (items) {
 	document.getElementById("main_page").style.display = "block";
 
-    console.log("Successfully loaded local storage values. Storage:");
-    console.log(items);
+	console.log("Successfully loaded local storage values. Storage:");
+	console.log(items);
 
 	// Load online acronyms
 	if (items["online_acronyms"]) {
@@ -173,7 +150,7 @@ chrome.storage.local.get(null, function(items) {
 	// Load custom acronyms
 	if (items.hasOwnProperty("custom_acronyms")) {
 		custom_acronyms = JSON.parse(items["custom_acronyms"]);
-		DB["custom"] = {"value": custom_acronyms, "active": true};
+		DB["custom"] = { "value": custom_acronyms, "active": true };
 		document.getElementById("local_configuration").value = JSON.stringify(custom_acronyms, null, 2);
 	}
 
@@ -183,7 +160,7 @@ chrome.storage.local.get(null, function(items) {
 	update_params();
 
 	// if our DB is not empty (if we have entries), we check if a word is selected
-	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 		var tab = tabs[0];
 		console.log(`Current tab: ${tab.url}`);
 		if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
@@ -191,14 +168,14 @@ chrome.storage.local.get(null, function(items) {
 			// Test if we are on Firefox (manifest v2 code)
 			if (on_firefox) {
 				const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
-				
-				chrome.tabs.executeScript(tab.id,{code: getWindowSelection},show_definition);
+
+				chrome.tabs.executeScript(tab.id, { code: getWindowSelection }, show_definition);
 			} else {
 				chrome.scripting
 					.executeScript({
 						target: {
 							tabId: tab.id,
-							},
+						},
 						func: () => window.getSelection() != '' ? window.getSelection().toString() : false,
 					})
 					.then((res) => show_definition(res));
@@ -212,7 +189,7 @@ chrome.storage.local.get(null, function(items) {
 	console.log(`Option case sensitive: ${items.case_sensitive}`);
 	if (items.case_sensitive != undefined)
 		document.getElementById("case_sensitive_option").checked = items.case_sensitive;
-	
+
 	if (items.auto_complete != undefined)
 		document.getElementById("auto_completion_option").checked = items.auto_complete;
 
