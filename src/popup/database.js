@@ -26,23 +26,46 @@ function search_in_db() {
 	let word = document.getElementById("search_word_in_db").value;
 	document.getElementById("word_definition_search").innerHTML = "";
 
+	word = word.trim();
+
 	case_sensitive = document.getElementById("case_sensitive_option").checked;
+	autocomplete = document.getElementById("auto_completion_option").checked;
 
 	// loop and show all elements that match the wanted acronym 'result'
 	let found_entry = false;
 	Object.keys(DB).forEach(source => {
 		if (DB[source]["active"]) {
 			DB[source]["value"].forEach(element => {
-				if (case_sensitive) {
+				if (case_sensitive && autocomplete) {
+					if (element['Acronym'] === word) {
+						appendHTML("word_definition_search", element, prepend=true);
+						found_entry = true;
+					}
+					else if (element['Acronym'].startsWith(word)) {
+						appendHTML("word_definition_search", element);
+						found_entry = true;
+					}
+				} else if (!case_sensitive && autocomplete) {
+					if (element['Acronym'].toUpperCase() === word.toUpperCase()) {
+						appendHTML("word_definition_search", element, prepend=true);
+						found_entry = true;
+					}
+					else if (element['Acronym'].toUpperCase().startsWith(word.toUpperCase())) {
+						appendHTML("word_definition_search", element);
+						found_entry = true;
+					}
+				} else if (case_sensitive && !autocomplete) {
 					if (element['Acronym'] === word) {
 						appendHTML("word_definition_search", element);
 						found_entry = true;
 					}
-				} else {
+				} else if (!case_sensitive && !autocomplete) {
 					if (element['Acronym'].toUpperCase() === word.toUpperCase()) {
 						appendHTML("word_definition_search", element);
 						found_entry = true;
 					}
+				} else {
+					console.log("If you read this line, there is a problem in the program.");
 				}
 			});
 		}

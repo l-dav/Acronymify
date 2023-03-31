@@ -66,6 +66,11 @@ document.getElementById("case_sensitive_option").onclick = function() {
 	save("case_sensitive", document.getElementById("case_sensitive_option").checked);
 };
 
+// save autocomplete checkbox value
+document.getElementById("auto_completion_option").onclick = function() {
+	save("auto_complete", document.getElementById("auto_completion_option").checked);
+};
+
 // search in DB
 document.getElementById("search_in_db").onclick                       = search_in_db
 
@@ -171,6 +176,9 @@ chrome.storage.local.get(null, function(items) {
 	console.log(`Option case sensitive: ${items.case_sensitive}`);
 	if (items.case_sensitive != undefined)
 		document.getElementById("case_sensitive_option").checked = items.case_sensitive;
+	
+	if (items.auto_complete != undefined)
+		document.getElementById("auto_completion_option").checked = items.auto_complete;
 
 	update_home_placeholder_nb_entries();
 

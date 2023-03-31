@@ -5,7 +5,7 @@
  * @param {string} parent_id ID of the node to append definitions
  * @param {dict} element dict containing acronym attributes
  */
-function appendHTML(parent_id, element) {
+function appendHTML(parent_id, element, prepend = false) {
 
 	// if we have an element without any attributes, don't display it
 	if(!element.Meaning && !element.Hint && !element.Alternatives &&! element.url) {
@@ -23,7 +23,13 @@ function appendHTML(parent_id, element) {
 
 	var div = document.createElement("div");
 	div.innerHTML = html_code;
-	document.getElementById(parent_id).appendChild(div);
+
+	if (prepend) {
+		document.getElementById(parent_id).prepend(div);
+	}
+	else {
+		document.getElementById(parent_id).appendChild(div);
+	}
 }
 
 
