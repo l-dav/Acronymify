@@ -5,7 +5,13 @@
 function show_definition(result) {
 	console.log(result);
 
-	result = result[0];
+	if (navigator.userAgent.indexOf("Firefox") !== -1) {
+		console.log("We are on Firefox");
+		result = result[0];
+	} else {
+		console.log("We are NOT on Firefox");
+		if (result[0]) result = result[0].result;
+	}
 	if (result && result != '') { // if a word is selected
 		console.log(result);
 		
