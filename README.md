@@ -12,7 +12,7 @@ The extension is available for Firefox, Chrome, Edge, and Opera.
 You can download Acronymify from the following stores:
 
 - Firefox: [AMO](https://addons.mozilla.org/addon/acronymify/).
-- Chrome, Brave, and Kiwi: [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca).
+- Chrome, Brave, Kiwi, Vivaldi, and other Chromium-based browsers: [CWS](https://chrome.google.com/webstore/detail/acronymify/lajlhjpjcbgfnopdcegllgdnjpfifnca).
 - Edge: [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/iafhomljhcdjpeiihmgmpkccllpjoalh).
 - Opera: [Opera addons](https://addons.opera.com/en-gb/extensions/details/acronymify/).
 
