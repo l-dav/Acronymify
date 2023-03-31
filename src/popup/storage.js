@@ -30,6 +30,9 @@ const save_custom_words = () => {
 		const customAcronyms = JSON.parse(document.getElementById("local_configuration").value);
 		save("custom_acronyms", JSON.stringify(customAcronyms));
 		document.getElementById("custom_db_loading_result").textContent = "Saving successful.";
+		DB["custom"] = { "value": customAcronyms, "active": true };
+		update_home_placeholder_nb_entries();
+		update_params();
 	} catch (err) {
 		console.error(err);
 		document.getElementById("custom_db_loading_result").textContent = "ERROR: Invalid JSON format. Please enter valid JSON data.";
