@@ -13,6 +13,14 @@ Website: https://github.com/l-dav/Acronymify
 
 console.log("Starting Acronymify popup");
 
+if (navigator.userAgent.indexOf("Firefox") !== -1) {
+	console.log("We are on Firefox");
+	on_firefox = true;
+} else {
+	console.log("We are NOT on Firefox");
+	on_firefox = false;
+}
+
 // Show version
 document.getElementById("version").textContent = 'Version ' + chrome.runtime.getManifest().version;
 
@@ -20,7 +28,10 @@ document.getElementById("version").textContent = 'Version ' + chrome.runtime.get
 document.getElementById("author").textContent = 'Author: ' + chrome.runtime.getManifest().author;
 
 // Show keyboard shortcut
-document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
+if (on_firefox)
+	document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_browser_action.suggested_key.default;
+else
+	document.getElementById("keyboard_shortcut").textContent = chrome.runtime.getManifest().commands._execute_action.suggested_key.default;
 
 /**
  * Return default JSON configuration
@@ -161,11 +172,24 @@ chrome.storage.local.get(null, function(items) {
 		var tab = tabs[0];
 		console.log(`Current tab: ${tab.url}`);
 		if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
-			const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
 
-			chrome.tabs.executeScript(tab.id,{
-				code: getWindowSelection
-			},show_definition);
+			// Test if we are on Firefox (manifest v2 code)
+			if (on_firefox) {
+				const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
+				
+				chrome.tabs.executeScript(tab.id,{
+					code: getWindowSelection
+				},show_definition);
+			} else {
+				chrome.scripting.executeScript({
+					target: {
+						tabId: tab.id,
+						},
+						func: () => {
+						return window.getSelection() != '' ? window.getSelection().toString() : false;
+						},
+					}).then((res) => show_definition(res));
+			}
 			
 		} else {
 			show_definition(false);
