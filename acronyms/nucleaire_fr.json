@@ -1,0 +1,54 @@
+{
+  "entries": [
+    {
+      "Acronym": "VD",
+      "Meaning": "Visite Décennale",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    },
+    {
+      "Acronym": "FUN",
+      "Meaning": "Facteur d'incertitude neutronique (fun fact, EDF prononce ça comme le mot anglais, Framatome épelle les lettres)",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    },
+    {
+      "Acronym": "RDS",
+      "Meaning": "Rapport définitif de sûreté",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    },
+    {
+      "Acronym": "EDG",
+      "Meaning": "éjection de grappe",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    },{
+      "Acronym": "RFTC",
+      "Meaning": "Rapport de flux thermique critique",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    },
+    {
+      "Acronym": "DIFBA",
+      "Meaning": "Démarrage intempestif de la fonction de borication automatique (le seul accident qui fait remonter le RFTC au lieu de le faire baisser ah ha)",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    },
+    {
+      "Acronym": "UNGG",
+      "Meaning": "Uranium naturel graphite gaz",
+      "Hint": "",
+      "Alternatives": "",
+      "url": ""
+    }
+  ],
+  "url_add" : "https://github.com/l-dav/Acronymify/pulls",
+  "mail_add" : "your@mail.com"
+}
