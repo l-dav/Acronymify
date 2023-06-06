@@ -1,4 +1,4 @@
-/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 											   _  __       
 	 /\                                       (_)/ _|      
 	/  \   ___ _ __ ___  _ __  _   _ _ __ ___  _| |_ _   _ 
@@ -9,12 +9,12 @@
 							   |___/                 |___/ 
 
 Website: https://github.com/l-dav/Acronymify
-*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*/
 
 console.log("Starting Acronymify popup");
 
-const on_firefox = navigator.userAgent.indexOf("Firefox") !== -1;
-console.log(on_firefox ? "On Firefox" : "NOT on Firefox");
+const onFirefox = navigator.userAgent.indexOf("Firefox") !== -1;
+console.log(onFirefox ? "On Firefox" : "NOT on Firefox");
 
 // Show version
 const versionEl = document.getElementById("version");
@@ -22,18 +22,18 @@ versionEl.textContent = `Version ${chrome.runtime.getManifest().version}`;
 
 // Show author
 const authorEl = document.getElementById("author");
-authorEl.textContent = `Author: ${chrome.runtime.getManifest().author}`;
+authorEl.textContent = `${chrome.runtime.getManifest().author}`;
 
 // Show keyboard shortcut
 const keyboardShortcutEl = document.getElementById("keyboard_shortcut");
-const commandKey = on_firefox ? "_execute_browser_action" : "_execute_action";
+const commandKey = onFirefox ? "_execute_browser_action" : "_execute_action";
 keyboardShortcutEl.textContent = chrome.runtime.getManifest().commands[commandKey].suggested_key.default;
 
 /**
  * Return default JSON configuration
  * @returns string 
  */
-function get_default_config() {
+function getDefaultConfig() {
 	return `{
 		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/configuration.json",
 		"url_add" : "https://github.com/l-dav/Acronymify/pulls",
@@ -46,7 +46,7 @@ function get_default_config() {
 
 // Store all acronyms
 var DB = {};
-var local_config = JSON.parse(get_default_config());
+var local_config = JSON.parse(getDefaultConfig());
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utility functions
@@ -133,7 +133,8 @@ document.getElementById("menu_help").addEventListener("click", () => changepage(
 // load storage data
 
 chrome.storage.local.get(null, function (items) {
-	document.getElementById("main_page").style.display = "block";
+	document.getElementsByTagName("BODY")[0].style.display = "flex";
+	document.getElementsByTagName("MAIN")[0].style.flexGrow = "1"; 
 
 	console.log("Successfully loaded local storage values. Storage:");
 	console.log(items);
@@ -166,7 +167,7 @@ chrome.storage.local.get(null, function (items) {
 		if (tab && !tab.url.startsWith('chrome') && !tab.url.startsWith('about:')) { // Sanity check
 
 			// Test if we are on Firefox (manifest v2 code)
-			if (on_firefox) {
+			if (onFirefox) {
 				const getWindowSelection = "window.getSelection() != '' ? window.getSelection().toString() : false;";
 
 				chrome.tabs.executeScript(tab.id, { code: getWindowSelection }, show_definition);
