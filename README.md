@@ -21,6 +21,17 @@ Acronymify is also properly working with Firefox for Android. You can find a tut
 
 Safari is ~~too expensive~~ not supported, but you may create your own version by downloading a [release](https://github.com/l-dav/Acronymify/releases/) and following [this tutorial](https://developer.apple.com/documentation/safariservices/safari_web_extensions/converting_a_web_extension_for_safari).
 
+## Known sources
+
+This section provides a list of online datasets that are compatible with Acronymify. To import the acronyms from these sources, simply copy and paste the provided direct link into the online tab of Acronymify.
+
+| Source | Description    | Language    | Repo | Direct link |
+| :---:   | :---: | :---: | :---: | :---: |
+| Voices of Nuclear | Acronyms related to the nuclear domain  | English / French   | [Framagit](https://framagit.org/tykayn/acronymify-voices-of-nuclear/-/tree/main) | [Raw](https://framagit.org/tykayn/acronymify-voices-of-nuclear/-/raw/main/acronymify-VoN.json) |
+| Professional | Professional acronyms   | English   | [GitHub](https://github.com/l-dav/Acronymify/blob/master/acronyms/professional.json) | [Raw](https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/professional.json) |
+| Computer | Acronyms related to computer science   | English   | [GitHub](https://github.com/l-dav/Acronymify/blob/master/acronyms/computer.json) | [Raw](https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/computer.json) |
+
+
 
 ## Usage
 
@@ -107,18 +118,35 @@ In the "Options" tab, you can currently configure two options:
 Acronymify is a web extension that allows you to manage acronyms in your browser. The source code is available in the folder `./src/`. It contains a file named manifest.json that contains metadata about the extension, as specified in the [Mozilla Documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json).
 
 
-## Build, Sign, Publish
+### Run locally
 
-The Makefile allows you to build, sign, publish the extension (Firefox only for now).
+To work with Acronymify locally, follow these steps:
 
-To build the extension (generate an unsigned local .xpi archive ; for testing purposes):
-> make build
+1. Clone or download the Acronymify repository to your machine.
+2. To run the Acronymify extension in your browser, you need to import it using the respective method for your browser:
+    - For Firefox:
+        - Enter "about:debugging#/runtime/this-firefox" in the address bar.
+        - Click on "Load Temporary Add-on" and navigate to the location where you downloaded the Acronymify repository.
+        - Select the "manifest.json" file and click "Open" to import it.
+    - For Chrome:
+        - Enter "chrome://extensions/" in the address bar.
+        - Toggle on the "Developer mode" switch located in the top-right corner.
+        - Click on "Load unpacked" and navigate to the folder where you downloaded the Acronymify repository.
+        - Open the folder containing the "manifest.json" file and click "Open" to import it.
+    - For other browsers, the process is similar. Refer to the respective browser's documentation for instructions on how to load a local extension.
+3. After successfully importing the extension, it should be available for use in your browser.
 
-To sign the extension and generate the .xpi archive (no public listing ; for testing purposes):
-> make sign
+By following these instructions, you will be able to run Acronymify locally.
 
-To sign the extension, generate the .xpi archive and list the new version on AMO:
-> make sign CHANNEL=listed
+## Contributing
+
+Contributions are always welcome!
+
+Check out the list of open issues in the repository. These are tasks and features that we have identified and would appreciate help with. You can find them [here](https://github.com/l-dav/Acronymify/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
+
+If you have a new idea or feature in mind that is not listed in the issues, feel free to propose it. Create a new issue and describe your idea in detail.
+
+Our team will review your contribution and collaborate with you to refine and merge it into the project.
 
 ## License
 
