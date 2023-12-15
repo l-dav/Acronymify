@@ -37,7 +37,7 @@ function getDefaultConfig() {
 	return `{
 		"acronyms_source" : "https://raw.githubusercontent.com/l-dav/Acronymify/master/acronyms/configuration.json",
 		"url_add" : "https://github.com/l-dav/Acronymify/pulls",
-		"mail_add" : "l.davidovski@technologyandstrategy.com"
+		"mail_add" : "057b0faf.technologyandstrategy.com@fr.teams.ms"
 	}`;
 }
 
